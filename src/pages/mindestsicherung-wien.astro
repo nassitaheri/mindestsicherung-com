@@ -10,6 +10,7 @@ const description = `Aktuelle Sätze der Wiener Mindestsicherung ${STAND.jahr}: 
 ---
 
 <Layout title={title} description={description} path="/mindestsicherung-wien/">
+
   <section class="hero container">
     <p class="hero__kicker">Wien · Stand {STAND.datum}</p>
     <h1 class="hero__title">
@@ -21,7 +22,7 @@ const description = `Aktuelle Sätze der Wiener Mindestsicherung ${STAND.jahr}: 
     </p>
   </section>
 
-  <section class="container">
+  <section class="container section-rechner">
     <Rechner client:load fixedBundesland="wien" />
   </section>
 
@@ -30,28 +31,31 @@ const description = `Aktuelle Sätze der Wiener Mindestsicherung ${STAND.jahr}: 
     <div class="table-wrap">
       <table class="saetze">
         <thead>
-          <tr><th>Personengruppe</th><th class="num">Mindeststandard / Monat</th></tr>
+          <tr>
+            <th>Personengruppe</th>
+            <th class="num">Mindeststandard / Monat</th>
+          </tr>
         </thead>
         <tbody>
           <tr>
             <td>Alleinwohnend / Alleinerziehend ab 25</td>
-            <td class="num">{euro(wien.saetze.alleinstehend)}</td>
+            <td class="num tabular">{euro(wien.saetze.alleinstehend)}</td>
           </tr>
           <tr>
             <td>Person ab 25 in Ehe / WG / Lebensgemeinschaft</td>
-            <td class="num">{euro(wien.saetze.gemeinschaft)}</td>
+            <td class="num tabular">{euro(wien.saetze.gemeinschaft)}</td>
           </tr>
           <tr>
             <td>Pro minderjährigem Kind (flach)</td>
-            <td class="num">{euro(wien.saetze.kindFlach)}</td>
+            <td class="num tabular">{euro(wien.saetze.kindFlach)}</td>
           </tr>
           <tr>
-            <td>Behindertenzuschlag (§40 BBG)</td>
-            <td class="num">{euro(wien.saetze.behindertenzuschlag)}</td>
+            <td>Behindertenzuschlag (§ 40 BBG)</td>
+            <td class="num tabular">{euro(wien.saetze.behindertenzuschlag)}</td>
           </tr>
           <tr>
             <td>Vermögensfreibetrag pro volljähriger Person</td>
-            <td class="num">{euro(wien.saetze.vermoegensfreibetrag)}</td>
+            <td class="num tabular">{euro(wien.saetze.vermoegensfreibetrag)}</td>
           </tr>
         </tbody>
       </table>
@@ -86,7 +90,7 @@ const description = `Aktuelle Sätze der Wiener Mindestsicherung ${STAND.jahr}: 
     <h2>Rechenbeispiel</h2>
     <p>
       Paar (beide 25+) mit zwei Kindern:
-      <span class="formula">
+      <span class="formula tabular">
         {euro(wien.saetze.gemeinschaft)} + {euro(wien.saetze.gemeinschaft)} +
         {euro(wien.saetze.kindFlach)} + {euro(wien.saetze.kindFlach)} =
         <strong>{euro(wien.saetze.gemeinschaft * 2 + wien.saetze.kindFlach * 2)}</strong>
@@ -115,100 +119,129 @@ const description = `Aktuelle Sätze der Wiener Mindestsicherung ${STAND.jahr}: 
   </section>
 
   <style>
+    /* ---- Hero — Punkt 2 ---- */
     .hero {
       padding-top: clamp(40px, 8vw, 80px);
-      padding-bottom: clamp(28px, 5vw, 40px);
+      padding-bottom: 0;
     }
     .hero__kicker {
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--color-muted);
+      color: var(--color-grey-400);
       margin: 0 0 12px;
     }
     .hero__title {
-      font-family: var(--font-display);
-      font-size: clamp(28px, 5vw, 42px);
+      font-size: clamp(28px, 5.5vw, 48px);
+      font-weight: 700;
       line-height: 1.1;
       letter-spacing: -0.02em;
+      color: var(--color-grey-900);
       margin: 0 0 16px;
       max-width: 22ch;
     }
     .hero__lead {
-      font-size: clamp(16px, 2.2vw, 18px);
-      color: var(--color-ink-soft);
-      line-height: 1.5;
-      max-width: 56ch;
+      font-size: clamp(16px, 2vw, 18px);
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      max-width: 52ch;
       margin: 0;
     }
 
+    .section-rechner {
+      margin-top: 64px;
+    }
+
+    /* ---- Content-Abschnitte ---- */
     .content {
-      margin-top: 56px;
+      margin-top: 64px;
     }
+    /* Punkt 2: 30px Section-Headings */
     .content h2 {
-      font-family: var(--font-display);
-      font-size: clamp(22px, 3.5vw, 26px);
+      font-size: 24px;
+      font-weight: 600;
       letter-spacing: -0.01em;
-      margin: 40px 0 14px;
-      color: var(--color-ink);
+      color: var(--color-grey-900);
+      /* Punkt 4: Space above > space below */
+      margin: 48px 0 12px;
     }
+    .content h2:first-child { margin-top: 0; }
     .content p,
     .content li {
-      color: var(--color-ink-soft);
+      font-size: 15px;
+      color: var(--color-grey-600);
       line-height: 1.6;
       max-width: 60ch;
     }
 
+    /* ---- Tabelle ---- */
     .table-wrap {
       overflow-x: auto;
-      border: 1px solid var(--color-line);
+      border: 1px solid var(--color-grey-100);
       border-radius: 10px;
-      background: var(--color-surface);
+      background: #fff;
     }
     .saetze {
       width: 100%;
       border-collapse: collapse;
-      font-size: 15px;
-      font-variant-numeric: tabular-nums;
+      font-size: 14px;
     }
     .saetze th,
     .saetze td {
       padding: 12px 16px;
       text-align: left;
-      border-bottom: 1px solid var(--color-line);
+      border-bottom: 1px solid var(--color-grey-100);
     }
     .saetze tr:last-child td {
       border-bottom: none;
     }
     .saetze th {
-      font-weight: 600;
-      color: var(--color-ink);
-      background: var(--color-bg);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-grey-500);
+      background: var(--color-grey-50);
     }
+    .saetze td { color: var(--color-grey-700); }
     .saetze .num {
       text-align: right;
       white-space: nowrap;
+      font-weight: 600;
+      color: var(--color-grey-900);
     }
+    .tabular { font-variant-numeric: tabular-nums; }
 
+    /* ---- Listen ---- */
     .changes,
     .sources {
-      padding-left: 22px;
+      padding-left: 20px;
+      margin: 0;
     }
     .changes li {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      color: var(--color-grey-600);
+      font-size: 15px;
     }
+    .sources li { margin-bottom: 6px; }
     .sources a {
-      color: var(--color-accent);
+      color: var(--color-primary-600);
       text-decoration: underline;
       text-underline-offset: 2px;
+      font-size: 14px;
     }
+
+    /* ---- Rechenbeispiel-Box ---- */
     .formula {
       display: inline-block;
-      font-variant-numeric: tabular-nums;
-      background: var(--color-accent-soft);
-      padding: 2px 8px;
+      background: var(--color-primary-50);
+      border: 1px solid var(--color-primary-200);
+      padding: 4px 10px;
       border-radius: 6px;
-      margin: 0 2px;
+      margin: 6px 0;
+      font-size: 14px;
     }
+    .formula strong { color: var(--color-primary-700); }
   </style>
 </Layout>

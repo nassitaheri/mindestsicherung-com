@@ -10,6 +10,8 @@ const description =
 ---
 
 <Layout title={title} description={description} path="/">
+
+  <!-- Punkt 2/4: Hero — 48px/700, max-width 680px, Abstand 64px zum Rechner -->
   <section class="hero container">
     <h1 class="hero__title">
       Mindestsicherung &amp; Sozialhilfe in Österreich — schnell ausrechnen.
@@ -20,30 +22,40 @@ const description =
     </p>
   </section>
 
-  <section class="container">
+  <section class="container section-rechner">
     <Rechner client:load />
   </section>
 
-  <section class="container info">
-    <h2>Bundesländer</h2>
-    <p class="info__lead">
+  <!-- Punkt 6: Bundesländer als Card-Grid -->
+  <section class="container section-info" aria-labelledby="bl-titel">
+    <h2 id="bl-titel" class="section-title">Bundesländer</h2>
+    <p class="section-lead">
       Sätze und Regeln unterscheiden sich pro Bundesland. Wien ist im Rechner
       vollständig geprüft, andere Bundesländer folgen.
     </p>
-    <ul class="laender">
+    <ul class="laender-grid" role="list">
       {BUNDESLAND_REIHENFOLGE.map((slug) => {
         const land = BUNDESLAENDER[slug];
         const isWien = slug === 'wien';
         return (
-          <li class={`laender__item ${land.status === 'draft' ? 'laender__item--draft' : ''}`}>
-            <div>
-              <strong>{land.name}</strong>
-              <span class="laender__sys"> — {land.systemName}</span>
+          <li class={`laender-card ${isWien ? 'laender-card--wien' : ''}`}>
+            <div class="laender-card__body">
+              <span class="laender-card__name">{land.name}</span>
+              <span class="laender-card__sys">{land.systemName}</span>
             </div>
-            {isWien ? (
-              <a href="/mindestsicherung-wien/">Zur Wien-Seite →</a>
-            ) : (
-              <span class="laender__status">In Prüfung</span>
+            <div>
+              {isWien ? (
+                <span class="badge badge--verfuegbar">Verfügbar</span>
+              ) : (
+                <span class="badge badge--pruefung">In Prüfung</span>
+              )}
+            </div>
+            {isWien && (
+              <a href="/mindestsicherung-wien/" class="laender-card__link" aria-label="Zur Wien-Seite">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
             )}
           </li>
         );
@@ -51,114 +63,253 @@ const description =
     </ul>
   </section>
 
-  <section class="container info">
-    <h2>Wie wir rechnen</h2>
-    <ol class="how">
-      <li><strong>Gesamtbedarf</strong> = Summe der Mindeststandards aller Haushaltsmitglieder.</li>
-      <li><strong>Deckelung</strong> der Erwachsenen-Beträge auf 175 % des Richtsatzes (rund 2.152,31 €).</li>
-      <li><strong>Minus anrechenbares Einkommen</strong> aller Personen.</li>
-      <li><strong>Vermögens-Check</strong>: Freibetrag 7.379,34 € pro volljähriger Person.</li>
-      <li><strong>Ergebnis</strong> = ergänzende Mindestsicherung pro Monat.</li>
+  <!-- Punkt 8: "Wie wir rechnen" mit Icons statt Bullets -->
+  <section class="container section-info" aria-labelledby="how-titel">
+    <h2 id="how-titel" class="section-title">Wie wir rechnen</h2>
+    <ol class="how-list" role="list">
+      <li class="how-item">
+        <!-- Users icon -->
+        <span class="how-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Gesamtbedarf</strong> = Summe der Mindeststandards aller
+          Haushaltsmitglieder.
+        </div>
+      </li>
+      <li class="how-item">
+        <!-- Shield icon -->
+        <span class="how-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Deckelung</strong> der Erwachsenen-Beträge auf 175 % des
+          Richtsatzes (rund 2.152,31 €).
+        </div>
+      </li>
+      <li class="how-item">
+        <!-- TrendingDown icon -->
+        <span class="how-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+            <polyline points="17 18 23 18 23 12"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Minus anrechenbares Einkommen</strong> aller Personen.
+        </div>
+      </li>
+      <li class="how-item">
+        <!-- Wallet icon -->
+        <span class="how-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/>
+            <path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/>
+            <path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Vermögens-Check:</strong> Freibetrag 7.379,34 € pro volljähriger
+          Person.
+        </div>
+      </li>
+      <li class="how-item">
+        <!-- CheckCircle icon -->
+        <span class="how-icon how-icon--primary" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+        </span>
+        <div>
+          <strong>Ergebnis</strong> = ergänzende Mindestsicherung pro Monat.
+        </div>
+      </li>
     </ol>
-    <p class="how__note">
+    <div class="how-note">
       Eine zusätzliche <strong>Mietbeihilfe</strong> ist je nach Bundesland möglich,
-      wird hier aber nicht mitberechnet — sie ist getrennt geregelt und hängt
-      stark vom Einzelfall ab.
-    </p>
+      wird hier aber nicht mitberechnet — sie ist getrennt geregelt.
+    </div>
   </section>
 
   <style>
+    /* ---- Hero — Punkt 2 ---- */
     .hero {
       padding-top: clamp(40px, 8vw, 80px);
-      padding-bottom: clamp(28px, 5vw, 40px);
+      padding-bottom: 0;
     }
     .hero__title {
-      font-family: var(--font-display);
-      font-size: clamp(30px, 5.5vw, 48px);
+      font-size: clamp(30px, 6vw, 48px);
+      font-weight: 700;
       line-height: 1.1;
       letter-spacing: -0.02em;
-      color: var(--color-ink);
+      color: var(--color-grey-900);
       margin: 0 0 16px;
-      max-width: 18ch;
+      max-width: 20ch;
     }
     .hero__lead {
-      font-size: clamp(16px, 2.2vw, 18px);
-      color: var(--color-ink-soft);
-      line-height: 1.5;
-      max-width: 56ch;
+      font-size: clamp(16px, 2vw, 18px);
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      max-width: 52ch;
       margin: 0;
     }
 
-    .info {
-      margin-top: 56px;
-    }
-    .info h2 {
-      font-family: var(--font-display);
-      font-size: clamp(22px, 3.5vw, 28px);
-      letter-spacing: -0.01em;
-      margin: 0 0 8px;
-      color: var(--color-ink);
-    }
-    .info__lead {
-      color: var(--color-ink-soft);
-      margin: 0 0 22px;
-      max-width: 56ch;
+    /* Punkt 4: 64px zwischen Hero und Rechner */
+    .section-rechner {
+      margin-top: 64px;
     }
 
-    .laender {
+    .section-info {
+      margin-top: 64px;
+    }
+
+    /* Section-Heading — Punkt 2: 30px, weight 600 */
+    .section-title {
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--color-grey-900);
+      margin: 0 0 8px;
+    }
+    .section-lead {
+      color: var(--color-grey-500);
+      font-size: 16px;
+      margin: 0 0 24px;
+      max-width: 52ch;
+    }
+
+    /* ---- Bundesländer Card-Grid — Punkt 6 ---- */
+    .laender-grid {
       list-style: none;
       padding: 0;
       margin: 0;
       display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
-    .laender__item {
+    @media (max-width: 480px) {
+      .laender-grid { grid-template-columns: 1fr; }
+    }
+    .laender-card {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 12px;
       padding: 14px 16px;
-      background: var(--color-surface);
-      border: 1px solid var(--color-line);
+      background: #fff;
+      border: 1px solid var(--color-grey-100);
       border-radius: 10px;
-      font-size: 15px;
+      font-size: 14px;
+      transition: box-shadow 120ms ease, border-color 120ms ease;
     }
-    .laender__item--draft {
-      opacity: 0.7;
+    .laender-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-color: var(--color-grey-200);
     }
-    .laender__sys {
-      color: var(--color-muted);
+    /* Wien: Primary-50 bg + Primary-200 border */
+    .laender-card--wien {
+      background: var(--color-primary-50);
+      border-color: var(--color-primary-200);
     }
-    .laender__status {
-      font-size: 13px;
-      color: var(--color-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .laender-card__body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
-    .laender__item a {
-      color: var(--color-accent);
-      text-decoration: none;
+    .laender-card__name {
+      font-weight: 600;
+      color: var(--color-grey-800);
+    }
+    .laender-card__sys {
+      font-size: 12px;
+      color: var(--color-grey-400);
+    }
+    /* Badges */
+    .badge {
+      display: inline-block;
+      font-size: 10px;
       font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 7px;
+      border-radius: 99px;
+      white-space: nowrap;
     }
+    .badge--verfuegbar {
+      background: var(--color-primary-100);
+      color: var(--color-primary-700);
+    }
+    .badge--pruefung {
+      background: var(--color-amber-100);
+      color: var(--color-amber-700);
+    }
+    .laender-card__link {
+      color: var(--color-primary-500);
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color 120ms ease;
+    }
+    .laender-card__link:hover { color: var(--color-primary-700); }
 
-    .how {
-      margin: 0 0 16px;
-      padding-left: 22px;
-      color: var(--color-ink-soft);
-      line-height: 1.6;
-      max-width: 60ch;
+    /* ---- "Wie wir rechnen" mit Icons — Punkt 8 ---- */
+    .how-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
-    .how li {
-      margin-bottom: 6px;
+    .how-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 15px;
+      color: var(--color-grey-600);
+      line-height: 1.5;
     }
-    .how__note {
-      max-width: 60ch;
-      color: var(--color-ink-soft);
-      background: #f5f5f0;
-      border-left: 3px solid var(--color-ink-soft);
-      padding: 12px 14px;
+    .how-item strong { color: var(--color-grey-800); }
+    .how-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 8px;
+      background: var(--color-grey-100);
+      color: var(--color-grey-500);
+      margin-top: 1px;
+    }
+    .how-icon--primary {
+      background: var(--color-primary-100);
+      color: var(--color-primary-600);
+    }
+    .how-note {
+      background: var(--color-grey-50);
+      border-left: 4px solid var(--color-grey-200);
+      padding: 12px 16px;
       border-radius: 4px;
       font-size: 14px;
-      margin: 0;
+      color: var(--color-grey-600);
+      max-width: 56ch;
     }
+    .how-note strong { color: var(--color-grey-800); }
   </style>
 </Layout>

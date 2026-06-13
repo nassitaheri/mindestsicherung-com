@@ -1,16 +1,9 @@
 ---
-/**
- * Globales Seiten-Layout.
- * - Setzt sprechende, individuelle Title/Description je Seite (SEO).
- * - Bringt Header + Footer.
- * - Lädt das globale Stylesheet (Tailwind + Tokens).
- */
 import '../styles/global.css';
 
 type Props = {
   title: string;
   description: string;
-  /** Pfad ohne Domain, z.B. "/mindestsicherung-wien/". */
   path?: string;
 };
 
@@ -27,26 +20,33 @@ const heutigesJahr = new Date().getFullYear();
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!-- Inter — Punkt 2 DESIGN-OPTIMIERUNG -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <!-- Open Graph (Social Sharing) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="de_AT" />
-
     <meta name="robots" content="index,follow" />
   </head>
   <body>
     <a href="#main" class="skiplink">Zum Inhalt springen</a>
 
+    <!-- Punkt 5 DESIGN-OPTIMIERUNG: Nav verfeinert -->
     <header class="site-header">
       <div class="container site-header__inner">
-        <a href="/" class="brand">
-          <span class="brand__name">mindestsicherung<span class="brand__dot">.com</span></span>
+        <a href="/" class="brand" aria-label="mindestsicherung.com — Startseite">
+          mindestsicherung<span class="brand__tld">.com</span>
         </a>
         <nav class="site-nav" aria-label="Hauptnavigation">
           <a href="/">Rechner</a>
@@ -59,8 +59,9 @@ const heutigesJahr = new Date().getFullYear();
       <slot />
     </main>
 
+    <!-- Punkt 7 DESIGN-OPTIMIERUNG: Footer verfeinert -->
     <footer class="site-footer">
-      <div class="container">
+      <div class="container site-footer__inner">
         <p class="footer-disclaimer">
           Unverbindliche Orientierung, keine Rechts- oder Sozialberatung.
           Maßgeblich sind die zuständigen Stellen des jeweiligen Bundeslandes.
@@ -74,8 +75,9 @@ const heutigesJahr = new Date().getFullYear();
     </footer>
 
     <style is:global>
+      /* ---- Layout-Kern ---- */
       .container {
-        max-width: 760px;
+        max-width: 680px;   /* Punkt 4: max-width 680 px */
         margin: 0 auto;
         padding: 0 20px;
       }
@@ -84,25 +86,22 @@ const heutigesJahr = new Date().getFullYear();
         position: absolute;
         left: -9999px;
         top: 0;
-      }
-      .skiplink:focus {
-        left: 12px;
-        top: 12px;
+        z-index: 100;
         background: white;
         padding: 10px 14px;
         border-radius: 8px;
-        z-index: 100;
       }
+      .skiplink:focus { left: 12px; top: 12px; }
 
-      /* ---- Header ---- */
+      /* ---- Header / Nav — Punkt 5 ---- */
       .site-header {
-        border-bottom: 1px solid var(--color-line);
-        background: var(--color-bg);
         position: sticky;
         top: 0;
-        z-index: 10;
-        backdrop-filter: saturate(140%) blur(6px);
-        background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+        z-index: 20;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px) saturate(160%);
+        border-bottom: 1px solid var(--color-grey-100);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
       }
       .site-header__inner {
         display: flex;
@@ -113,51 +112,68 @@ const heutigesJahr = new Date().getFullYear();
       }
       .brand {
         text-decoration: none;
-        color: var(--color-ink);
+        font-size: 15px;
         font-weight: 600;
         letter-spacing: -0.01em;
-        font-size: 16px;
+        color: var(--color-primary-700);
+        line-height: 1;
       }
-      .brand__dot {
-        color: var(--color-accent);
+      .brand__tld {
+        color: var(--color-primary-500);
       }
       .site-nav {
         display: flex;
-        gap: 18px;
-        font-size: 15px;
+        gap: 20px;
+        font-size: 14px;
+        font-weight: 500;
       }
       .site-nav a {
-        color: var(--color-ink-soft);
+        color: var(--color-grey-600);
         text-decoration: none;
+        transition: color 120ms ease;
       }
       .site-nav a:hover {
-        color: var(--color-accent);
+        color: var(--color-primary-600);
       }
 
-      /* ---- Footer ---- */
+      /* ---- Footer — Punkt 7 ---- */
       .site-footer {
-        margin-top: 80px;
-        border-top: 1px solid var(--color-line);
-        padding: 36px 0 60px;
-        color: var(--color-muted);
-        font-size: 13px;
+        margin-top: 96px;
+        background: var(--color-grey-50);
+        border-top: 1px solid var(--color-grey-100);
+        padding: 40px 0 64px;
+      }
+      .site-footer__inner {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
       .footer-disclaimer {
-        margin: 0 0 18px;
+        font-size: 13px;
+        color: var(--color-grey-400);
         font-style: italic;
-        max-width: 60ch;
+        line-height: 1.5;
+        max-width: 56ch;
+        margin: 0;
       }
       .footer-nav {
         display: flex;
-        gap: 18px;
-        margin-bottom: 14px;
+        gap: 20px;
       }
       .footer-nav a {
-        color: var(--color-ink-soft);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--color-grey-500);
         text-decoration: underline;
         text-underline-offset: 2px;
+        transition: color 120ms ease;
+      }
+      .footer-nav a:hover {
+        color: var(--color-primary-600);
       }
       .footer-copy {
+        font-size: 12px;
+        color: var(--color-grey-400);
         margin: 0;
       }
     </style>

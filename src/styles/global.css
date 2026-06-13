@@ -1,53 +1,100 @@
 @import "tailwindcss";
 
-/* ---------------------------------------------------------------------------
-   Design-Tokens — eine ruhige, seriöse Akzentfarbe (Brief 6: "öffentlich-
-   rechtlich seriös, nicht reißerisch").
-   Dunkles Tannengrün als Akzent. Neutraler Hintergrund.
-   --------------------------------------------------------------------------- */
+/* ============================================================================
+   FARBSYSTEM — vollständig in HSL, 9 Abstufungen je Skala
+   Punkt 1 aus DESIGN-OPTIMIERUNG.md
+   ============================================================================ */
+
 @theme {
-  --color-ink: #111418;
-  --color-ink-soft: #3a4250;
-  --color-muted: #6b7480;
-  --color-line: #e3e6eb;
-  --color-bg: #fafaf7;
-  --color-surface: #ffffff;
-  --color-accent: #1f5a4a;
-  --color-accent-soft: #e7f1ed;
-  --color-warn: #b14f1c;
-  --color-warn-soft: #fdf1e7;
+  /* Primary — gedämpftes Teal-Green, "öffentlich-rechtlich seriös" */
+  /* Ausgangspunkt: hsl(172, 40%, 30%) lt. Brief */
+  --color-primary-50:  hsl(172, 40%, 96%);
+  --color-primary-100: hsl(172, 38%, 90%);
+  --color-primary-200: hsl(172, 36%, 78%);
+  --color-primary-300: hsl(172, 34%, 63%);
+  --color-primary-400: hsl(172, 36%, 49%);
+  --color-primary-500: hsl(172, 40%, 37%);
+  --color-primary-600: hsl(172, 42%, 29%);
+  --color-primary-700: hsl(172, 44%, 22%);
+  --color-primary-800: hsl(172, 46%, 16%);
+  --color-primary-900: hsl(172, 50%, 10%);
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --font-display: "Charter", "Iowan Old Style", "Apple Garamond",
-    "Source Serif Pro", Georgia, serif;
+  /* Greys — leicht mit Hue 220 getönt (5–10 % Sättigung) */
+  --color-grey-50:  hsl(220, 20%, 98%);
+  --color-grey-100: hsl(220, 16%, 94%);
+  --color-grey-200: hsl(220, 14%, 88%);
+  --color-grey-300: hsl(220, 12%, 76%);
+  --color-grey-400: hsl(220, 10%, 62%);
+  --color-grey-500: hsl(220,  9%, 48%);
+  --color-grey-600: hsl(220, 10%, 36%);
+  --color-grey-700: hsl(220, 12%, 26%);
+  --color-grey-800: hsl(220, 14%, 16%);
+  --color-grey-900: hsl(220, 16%,  8%);
 
-  --radius-card: 14px;
+  /* Semantisch */
+  --color-success-bg:   hsl(145, 35%, 94%);
+  --color-success-text: hsl(145, 35%, 28%);
+  --color-warning-bg:   hsl(48,  96%, 92%);
+  --color-warning-text: hsl(32,  81%, 28%);
+  --color-warning-border: hsl(38, 85%, 48%);
+
+  /* Amber für "In Prüfung"-Badge */
+  --color-amber-100: hsl(48, 96%, 90%);
+  --color-amber-700: hsl(32, 81%, 28%);
+
+  /* Legacy-Aliases — bestehende Referenzen in Layout + Wien-Seite */
+  --color-ink:       hsl(220, 16%,  8%);
+  --color-ink-soft:  hsl(220, 10%, 36%);
+  --color-muted:     hsl(220,  9%, 48%);
+  --color-line:      hsl(220, 14%, 88%);
+  --color-bg:        hsl(220, 20%, 98%);
+  --color-surface:   #ffffff;
+  --color-accent:    hsl(172, 42%, 29%);
+  --color-accent-soft: hsl(172, 40%, 96%);
+  --color-warn:      hsl(32, 81%, 28%);
+  --color-warn-soft: hsl(48, 96%, 92%);
+
+  /* Typografie */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --radius-card: 12px;
 }
 
-/* Base */
+/* ============================================================================
+   TYPOGRAFIE-SYSTEM — Punkt 2
+   Scale: 12 · 14 · 16 · 18 · 20 · 24 · 30 · 36 · 48
+   Weights: 400 Body · 500 Labels · 600 Headings · 700 Hero/Wert
+   ============================================================================ */
+
 html {
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
-}
-body {
-  font-family: var(--font-sans);
-  background: var(--color-bg);
-  color: var(--color-ink);
-  font-feature-settings: "tnum" 1, "kern" 1;
+  font-feature-settings: "kern" 1;
 }
 
-/* Sichtbarer Fokus für Tastatur-Bedienung (a11y) */
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  background: var(--color-grey-50);
+  color: var(--color-grey-900);
+  font-feature-settings: "tnum" 0, "kern" 1;
+}
+
+/* Tabular nums nur dort wo sinnvoll (Zahlen) */
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Sichtbarer Fokus (a11y) */
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-primary-500);
   outline-offset: 2px;
   border-radius: 6px;
 }
 
-/* Touch-Targets mind. 44px für Bedienelemente */
-button,
-[role="button"],
-input,
-select {
+/* Touch-Targets mind. 44 px */
+button, [role="button"], input, select {
   min-height: 44px;
 }
