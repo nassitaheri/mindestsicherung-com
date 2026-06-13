@@ -1,0 +1,165 @@
+---
+/**
+ * Globales Seiten-Layout.
+ * - Setzt sprechende, individuelle Title/Description je Seite (SEO).
+ * - Bringt Header + Footer.
+ * - Lädt das globale Stylesheet (Tailwind + Tokens).
+ */
+import '../styles/global.css';
+
+type Props = {
+  title: string;
+  description: string;
+  /** Pfad ohne Domain, z.B. "/mindestsicherung-wien/". */
+  path?: string;
+};
+
+const { title, description, path = '/' } = Astro.props;
+const canonical = `https://mindestsicherung.com${path}`;
+const heutigesJahr = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="de-AT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph (Social Sharing) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="de_AT" />
+
+    <meta name="robots" content="index,follow" />
+  </head>
+  <body>
+    <a href="#main" class="skiplink">Zum Inhalt springen</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a href="/" class="brand">
+          <span class="brand__name">mindestsicherung<span class="brand__dot">.com</span></span>
+        </a>
+        <nav class="site-nav" aria-label="Hauptnavigation">
+          <a href="/">Rechner</a>
+          <a href="/mindestsicherung-wien/">Wien</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p class="footer-disclaimer">
+          Unverbindliche Orientierung, keine Rechts- oder Sozialberatung.
+          Maßgeblich sind die zuständigen Stellen des jeweiligen Bundeslandes.
+        </p>
+        <nav class="footer-nav" aria-label="Rechtliches">
+          <a href="/impressum/">Impressum</a>
+          <a href="/datenschutz/">Datenschutz</a>
+        </nav>
+        <p class="footer-copy">© {heutigesJahr} mindestsicherung.com</p>
+      </div>
+    </footer>
+
+    <style is:global>
+      .container {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .skiplink {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+      }
+      .skiplink:focus {
+        left: 12px;
+        top: 12px;
+        background: white;
+        padding: 10px 14px;
+        border-radius: 8px;
+        z-index: 100;
+      }
+
+      /* ---- Header ---- */
+      .site-header {
+        border-bottom: 1px solid var(--color-line);
+        background: var(--color-bg);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: saturate(140%) blur(6px);
+        background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+      }
+      .site-header__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 14px;
+        padding-bottom: 14px;
+      }
+      .brand {
+        text-decoration: none;
+        color: var(--color-ink);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        font-size: 16px;
+      }
+      .brand__dot {
+        color: var(--color-accent);
+      }
+      .site-nav {
+        display: flex;
+        gap: 18px;
+        font-size: 15px;
+      }
+      .site-nav a {
+        color: var(--color-ink-soft);
+        text-decoration: none;
+      }
+      .site-nav a:hover {
+        color: var(--color-accent);
+      }
+
+      /* ---- Footer ---- */
+      .site-footer {
+        margin-top: 80px;
+        border-top: 1px solid var(--color-line);
+        padding: 36px 0 60px;
+        color: var(--color-muted);
+        font-size: 13px;
+      }
+      .footer-disclaimer {
+        margin: 0 0 18px;
+        font-style: italic;
+        max-width: 60ch;
+      }
+      .footer-nav {
+        display: flex;
+        gap: 18px;
+        margin-bottom: 14px;
+      }
+      .footer-nav a {
+        color: var(--color-ink-soft);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .footer-copy {
+        margin: 0;
+      }
+    </style>
+  </body>
+</html>

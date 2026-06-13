@@ -1,0 +1,214 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Rechner from '../components/Rechner.svelte';
+import { BUNDESLAENDER, STAND } from '../data/saetze-2026';
+import { euro } from '../lib/calc';
+
+const wien = BUNDESLAENDER.wien;
+const title = `Mindestsicherung Wien ${STAND.jahr} — Rechner, Sätze und Änderungen | mindestsicherung.com`;
+const description = `Aktuelle Sätze der Wiener Mindestsicherung ${STAND.jahr}: Alleinstehend ${euro(wien.saetze.alleinstehend)}, pro Erwachsenem in Gemeinschaft ${euro(wien.saetze.gemeinschaft)}, pro Kind ${euro(wien.saetze.kindFlach)}. Mit kostenlosem Online-Rechner.`;
+---
+
+<Layout title={title} description={description} path="/mindestsicherung-wien/">
+  <section class="hero container">
+    <p class="hero__kicker">Wien · Stand {STAND.datum}</p>
+    <h1 class="hero__title">
+      Mindestsicherung in Wien {STAND.jahr} — was steht dir zu?
+    </h1>
+    <p class="hero__lead">
+      Wien bezeichnet das System weiterhin als „Mindestsicherung". Der Rechner
+      unten verwendet die offiziell veröffentlichten Sätze {STAND.jahr}.
+    </p>
+  </section>
+
+  <section class="container">
+    <Rechner client:load fixedBundesland="wien" />
+  </section>
+
+  <section class="container content">
+    <h2>Sätze {STAND.jahr} im Überblick</h2>
+    <div class="table-wrap">
+      <table class="saetze">
+        <thead>
+          <tr><th>Personengruppe</th><th class="num">Mindeststandard / Monat</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alleinwohnend / Alleinerziehend ab 25</td>
+            <td class="num">{euro(wien.saetze.alleinstehend)}</td>
+          </tr>
+          <tr>
+            <td>Person ab 25 in Ehe / WG / Lebensgemeinschaft</td>
+            <td class="num">{euro(wien.saetze.gemeinschaft)}</td>
+          </tr>
+          <tr>
+            <td>Pro minderjährigem Kind (flach)</td>
+            <td class="num">{euro(wien.saetze.kindFlach)}</td>
+          </tr>
+          <tr>
+            <td>Behindertenzuschlag (§40 BBG)</td>
+            <td class="num">{euro(wien.saetze.behindertenzuschlag)}</td>
+          </tr>
+          <tr>
+            <td>Vermögensfreibetrag pro volljähriger Person</td>
+            <td class="num">{euro(wien.saetze.vermoegensfreibetrag)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Wichtige Änderungen ab 1.1.{STAND.jahr}</h2>
+    <ul class="changes">
+      <li>
+        <strong>Subsidiär Schutzberechtigte:</strong> kein Anspruch mehr auf
+        Mindestsicherung — stattdessen Grundversorgung.
+      </li>
+      <li>
+        <strong>Elternzuschlag</strong> (rund 54,41 €) per 31.12.2025
+        ersatzlos gestrichen.
+      </li>
+      <li>
+        <strong>Aufteilung 75 % Lebensunterhalt / 25 % Wohnbedarf:</strong>
+        der 25 %-Wohnanteil wird von der Mietbeihilfe abgezogen, ab {STAND.jahr}
+        auch bei Kindern.
+      </li>
+      <li>
+        <strong>WGs</strong> werden wie Bedarfsgemeinschaften behandelt
+        (70 %-Satz pro Person).
+      </li>
+      <li>
+        <strong>Junge Erwachsene 18–25:</strong> erhöhter Satz nur bei
+        Ausbildung oder Erwerb. Teilnahme an AMS- oder Integrationsmaßnahmen
+        zählt seit 1.1.{STAND.jahr} nicht mehr dafür.
+      </li>
+    </ul>
+
+    <h2>Rechenbeispiel</h2>
+    <p>
+      Paar (beide 25+) mit zwei Kindern:
+      <span class="formula">
+        {euro(wien.saetze.gemeinschaft)} + {euro(wien.saetze.gemeinschaft)} +
+        {euro(wien.saetze.kindFlach)} + {euro(wien.saetze.kindFlach)} =
+        <strong>{euro(wien.saetze.gemeinschaft * 2 + wien.saetze.kindFlach * 2)}</strong>
+      </span>
+      Gesamtbedarf pro Monat. Davon wird das gesamte anrechenbare Einkommen
+      abgezogen.
+    </p>
+
+    <h2>Quellen</h2>
+    <ul class="sources">
+      <li>
+        <a href={wien.quelle.url} target="_blank" rel="noopener noreferrer">
+          {wien.quelle.label}
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://www.sozialministerium.gv.at/Themen/Soziales/Sozialhilfe-und-Mindestsicherung.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Sozialministerium — Sozialhilfe und Mindestsicherung
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <style>
+    .hero {
+      padding-top: clamp(40px, 8vw, 80px);
+      padding-bottom: clamp(28px, 5vw, 40px);
+    }
+    .hero__kicker {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+      margin: 0 0 12px;
+    }
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin: 0 0 16px;
+      max-width: 22ch;
+    }
+    .hero__lead {
+      font-size: clamp(16px, 2.2vw, 18px);
+      color: var(--color-ink-soft);
+      line-height: 1.5;
+      max-width: 56ch;
+      margin: 0;
+    }
+
+    .content {
+      margin-top: 56px;
+    }
+    .content h2 {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 3.5vw, 26px);
+      letter-spacing: -0.01em;
+      margin: 40px 0 14px;
+      color: var(--color-ink);
+    }
+    .content p,
+    .content li {
+      color: var(--color-ink-soft);
+      line-height: 1.6;
+      max-width: 60ch;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--color-line);
+      border-radius: 10px;
+      background: var(--color-surface);
+    }
+    .saetze {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+    }
+    .saetze th,
+    .saetze td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-line);
+    }
+    .saetze tr:last-child td {
+      border-bottom: none;
+    }
+    .saetze th {
+      font-weight: 600;
+      color: var(--color-ink);
+      background: var(--color-bg);
+    }
+    .saetze .num {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .changes,
+    .sources {
+      padding-left: 22px;
+    }
+    .changes li {
+      margin-bottom: 8px;
+    }
+    .sources a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .formula {
+      display: inline-block;
+      font-variant-numeric: tabular-nums;
+      background: var(--color-accent-soft);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin: 0 2px;
+    }
+  </style>
+</Layout>

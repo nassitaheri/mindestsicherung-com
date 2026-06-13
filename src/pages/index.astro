@@ -1,0 +1,164 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Rechner from '../components/Rechner.svelte';
+import { STAND, BUNDESLAENDER, BUNDESLAND_REIHENFOLGE } from '../data/saetze-2026';
+
+const title =
+  'Mindestsicherung-Rechner 2026 — Schnell, klar, ohne Werbeflut | mindestsicherung.com';
+const description =
+  'Wie viel Mindestsicherung steht dir 2026 zu? Schneller, transparenter Rechner für Österreich. Geprüft für Wien. Keine Anmeldung, keine Werbung, sofortiges Ergebnis.';
+---
+
+<Layout title={title} description={description} path="/">
+  <section class="hero container">
+    <h1 class="hero__title">
+      Mindestsicherung &amp; Sozialhilfe in Österreich — schnell ausrechnen.
+    </h1>
+    <p class="hero__lead">
+      Klare Berechnung nach den aktuellen Sätzen {STAND.jahr}. Ohne Anmeldung,
+      ohne Werbeflut, ohne juristischen Jargon.
+    </p>
+  </section>
+
+  <section class="container">
+    <Rechner client:load />
+  </section>
+
+  <section class="container info">
+    <h2>Bundesländer</h2>
+    <p class="info__lead">
+      Sätze und Regeln unterscheiden sich pro Bundesland. Wien ist im Rechner
+      vollständig geprüft, andere Bundesländer folgen.
+    </p>
+    <ul class="laender">
+      {BUNDESLAND_REIHENFOLGE.map((slug) => {
+        const land = BUNDESLAENDER[slug];
+        const isWien = slug === 'wien';
+        return (
+          <li class={`laender__item ${land.status === 'draft' ? 'laender__item--draft' : ''}`}>
+            <div>
+              <strong>{land.name}</strong>
+              <span class="laender__sys"> — {land.systemName}</span>
+            </div>
+            {isWien ? (
+              <a href="/mindestsicherung-wien/">Zur Wien-Seite →</a>
+            ) : (
+              <span class="laender__status">In Prüfung</span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <section class="container info">
+    <h2>Wie wir rechnen</h2>
+    <ol class="how">
+      <li><strong>Gesamtbedarf</strong> = Summe der Mindeststandards aller Haushaltsmitglieder.</li>
+      <li><strong>Deckelung</strong> der Erwachsenen-Beträge auf 175 % des Richtsatzes (rund 2.152,31 €).</li>
+      <li><strong>Minus anrechenbares Einkommen</strong> aller Personen.</li>
+      <li><strong>Vermögens-Check</strong>: Freibetrag 7.379,34 € pro volljähriger Person.</li>
+      <li><strong>Ergebnis</strong> = ergänzende Mindestsicherung pro Monat.</li>
+    </ol>
+    <p class="how__note">
+      Eine zusätzliche <strong>Mietbeihilfe</strong> ist je nach Bundesland möglich,
+      wird hier aber nicht mitberechnet — sie ist getrennt geregelt und hängt
+      stark vom Einzelfall ab.
+    </p>
+  </section>
+
+  <style>
+    .hero {
+      padding-top: clamp(40px, 8vw, 80px);
+      padding-bottom: clamp(28px, 5vw, 40px);
+    }
+    .hero__title {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 5.5vw, 48px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--color-ink);
+      margin: 0 0 16px;
+      max-width: 18ch;
+    }
+    .hero__lead {
+      font-size: clamp(16px, 2.2vw, 18px);
+      color: var(--color-ink-soft);
+      line-height: 1.5;
+      max-width: 56ch;
+      margin: 0;
+    }
+
+    .info {
+      margin-top: 56px;
+    }
+    .info h2 {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 3.5vw, 28px);
+      letter-spacing: -0.01em;
+      margin: 0 0 8px;
+      color: var(--color-ink);
+    }
+    .info__lead {
+      color: var(--color-ink-soft);
+      margin: 0 0 22px;
+      max-width: 56ch;
+    }
+
+    .laender {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }
+    .laender__item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-line);
+      border-radius: 10px;
+      font-size: 15px;
+    }
+    .laender__item--draft {
+      opacity: 0.7;
+    }
+    .laender__sys {
+      color: var(--color-muted);
+    }
+    .laender__status {
+      font-size: 13px;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .laender__item a {
+      color: var(--color-accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .how {
+      margin: 0 0 16px;
+      padding-left: 22px;
+      color: var(--color-ink-soft);
+      line-height: 1.6;
+      max-width: 60ch;
+    }
+    .how li {
+      margin-bottom: 6px;
+    }
+    .how__note {
+      max-width: 60ch;
+      color: var(--color-ink-soft);
+      background: #f5f5f0;
+      border-left: 3px solid var(--color-ink-soft);
+      padding: 12px 14px;
+      border-radius: 4px;
+      font-size: 14px;
+      margin: 0;
+    }
+  </style>
+</Layout>

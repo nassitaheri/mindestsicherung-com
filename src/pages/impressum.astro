@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = 'Impressum | mindestsicherung.com';
+const description = 'Impressum und Offenlegung nach §5 ECG.';
+---
+
+<Layout title={title} description={description} path="/impressum/">
+  <section class="container legal">
+    <h1>Impressum</h1>
+    <p class="placeholder">
+      <strong>Platzhalter.</strong> Diese Seite muss vor dem Live-Schalten der
+      Domain mit den korrekten Daten gefüllt werden.
+    </p>
+
+    <h2>Medieninhaber, Herausgeber, Verleger</h2>
+    <p>
+      [Vor- und Nachname / Firmenwortlaut]<br />
+      [Straße und Hausnummer]<br />
+      [PLZ Ort]<br />
+      Österreich
+    </p>
+
+    <h2>Kontakt</h2>
+    <p>
+      E-Mail: [E-Mail-Adresse]<br />
+      Telefon: [optional]
+    </p>
+
+    <h2>Unternehmensgegenstand</h2>
+    <p>
+      Bereitstellung von redaktionellen Informationen und einem Online-Rechner
+      zum Thema Mindestsicherung / Sozialhilfe in Österreich.
+    </p>
+
+    <h2>Rechtliche Hinweise</h2>
+    <p>
+      Die Inhalte dieser Website werden mit größter Sorgfalt erstellt, eine Gewähr
+      für Aktualität, Richtigkeit und Vollständigkeit kann jedoch nicht übernommen
+      werden. Die Inhalte ersetzen keine Rechts- oder Sozialberatung. Verbindliche
+      Auskünfte erteilen ausschließlich die zuständigen Stellen des jeweiligen
+      Bundeslandes.
+    </p>
+
+    <h2>Online-Streitbeilegung</h2>
+    <p>
+      Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung
+      bereit:
+      <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">
+        https://ec.europa.eu/consumers/odr
+      </a>
+    </p>
+  </section>
+
+  <style>
+    .legal {
+      padding-top: clamp(32px, 6vw, 64px);
+      max-width: 720px;
+    }
+    .legal h1 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 5vw, 40px);
+      letter-spacing: -0.02em;
+      margin: 0 0 24px;
+    }
+    .legal h2 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      margin: 36px 0 8px;
+    }
+    .legal p {
+      color: var(--color-ink-soft);
+      line-height: 1.6;
+      max-width: 60ch;
+    }
+    .placeholder {
+      background: var(--color-warn-soft);
+      border-left: 3px solid var(--color-warn);
+      padding: 12px 14px;
+      border-radius: 4px;
+    }
+  </style>
+</Layout>

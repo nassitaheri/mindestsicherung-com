@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = 'Datenschutzerklärung | mindestsicherung.com';
+const description = 'Datenschutzerklärung gemäß DSGVO.';
+---
+
+<Layout title={title} description={description} path="/datenschutz/">
+  <section class="container legal">
+    <h1>Datenschutzerklärung</h1>
+    <p class="placeholder">
+      <strong>Platzhalter.</strong> Diese Seite muss vor dem Live-Schalten der
+      Domain mit den finalen Inhalten gefüllt werden — spätestens dann, wenn
+      AdSense, Affiliate-Links, Analytics oder andere externe Dienste aktiv sind.
+    </p>
+
+    <h2>Verantwortlicher</h2>
+    <p>Siehe <a href="/impressum/">Impressum</a>.</p>
+
+    <h2>Welche Daten werden verarbeitet?</h2>
+    <p>
+      Beim Aufruf dieser Website werden technische Daten (z. B. IP-Adresse,
+      Browser-Typ, aufgerufene Seite) in Server-Logs des Hosting-Anbieters
+      gespeichert. Diese Daten werden nicht mit anderen Datenquellen zusammengeführt.
+    </p>
+
+    <h2>Der Mindestsicherungs-Rechner</h2>
+    <p>
+      Sämtliche Eingaben im Rechner werden ausschließlich lokal in deinem Browser
+      verarbeitet. Es findet keine Übertragung an den Server statt — die Berechnung
+      passiert auf deinem Gerät.
+    </p>
+
+    <h2>Cookies</h2>
+    <p>
+      Aktuell werden keine eigenen Tracking-Cookies gesetzt. Sollten in Zukunft
+      Drittanbieter-Dienste (z. B. Werbung, Analytics) integriert werden, wird zuvor
+      ein Cookie-Banner mit Einwilligung eingeblendet.
+    </p>
+
+    <h2>Deine Rechte</h2>
+    <p>
+      Du hast Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der
+      Verarbeitung, Datenübertragbarkeit und Widerspruch. Anfragen bitte an die
+      im Impressum genannte Adresse. Beschwerden kannst du bei der österreichischen
+      Datenschutzbehörde einbringen:
+      <a href="https://www.dsb.gv.at" target="_blank" rel="noopener noreferrer">
+        www.dsb.gv.at
+      </a>.
+    </p>
+  </section>
+
+  <style>
+    .legal {
+      padding-top: clamp(32px, 6vw, 64px);
+      max-width: 720px;
+    }
+    .legal h1 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 5vw, 40px);
+      letter-spacing: -0.02em;
+      margin: 0 0 24px;
+    }
+    .legal h2 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      margin: 36px 0 8px;
+    }
+    .legal p {
+      color: var(--color-ink-soft);
+      line-height: 1.6;
+      max-width: 60ch;
+    }
+    .legal a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .placeholder {
+      background: var(--color-warn-soft);
+      border-left: 3px solid var(--color-warn);
+      padding: 12px 14px;
+      border-radius: 4px;
+    }
+  </style>
+</Layout>
