@@ -1,33 +1,85 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import BundeslandLayout from '../layouts/BundeslandLayout.astro';
 import Rechner from '../components/Rechner.svelte';
-import { BUNDESLAENDER, STAND } from '../data/saetze-2026';
-import { euro } from '../lib/calc';
+import { BUNDESLAENDER } from '../data/saetze-2026';
 
-const wien = BUNDESLAENDER.wien;
-const title = 'Mindestsicherung Wien 2026 – Beträge, Voraussetzungen & Antrag';
-const description = 'Mindestsicherung Wien 2026: Aktuelle Beträge, Voraussetzungen, Antragstellung und wichtige Änderungen ab Jänner 2026. Mit kostenlosem Rechner.';
+const land = BUNDESLAENDER.wien;
+
+const meta = {
+  title: 'Mindestsicherung Wien 2026: Höhe & Antrag | mindestsicherung.com',
+  description:
+    'Wie viel Mindestsicherung steht dir in Wien 2026 zu? Aktuelle Sätze, Anspruch, Antrag und die Änderungen ab Jänner 2026. In 2 Minuten berechnen, ohne Anmeldung.',
+};
+
+// Eindeutige FAQ (speist sichtbare Liste UND FAQPage-Schema)
+const faq = [
+  {
+    frage: 'Kann ich Mindestsicherung und Arbeit in Wien kombinieren?',
+    antwort:
+      'Ja. Erwerbseinkommen wird nicht zur Gänze angerechnet. In Wien bleibt derzeit ein Freibetrag von bis zu 20 % des Erwerbseinkommens anrechnungsfrei, um einen Anreiz zur Erwerbstätigkeit zu erhalten.',
+  },
+  {
+    frage: 'Was passiert mit der Wiener Mindestsicherung bei einer Erbschaft?',
+    antwort:
+      'Eine Erbschaft zählt als Vermögen und wird nach Abzug des Freibetrags von 7.379,34 € pro volljähriger Person angerechnet. Eine Erbschaft ist der MA 40 unverzüglich zu melden.',
+  },
+  {
+    frage: 'Zählt die Familienbeihilfe in Wien als Einkommen?',
+    antwort:
+      'Nein. Die Familienbeihilfe wird in der Regel nicht als anrechenbares Einkommen behandelt und mindert die Mindestsicherung daher nicht.',
+  },
+  {
+    frage: 'Was kann ich tun, wenn mein Antrag in Wien abgelehnt wird?',
+    antwort:
+      'Gegen einen ablehnenden Bescheid der MA 40 kann innerhalb von 4 Wochen ab Zustellung Beschwerde beim Verwaltungsgericht Wien eingelegt werden. Kostenlose Beratung bieten AK Wien, Caritas und Volkshilfe.',
+  },
+];
+
+const quellen = [
+  { label: 'Stadt Wien — MA 40, Mindestsicherung (wien.gv.at)', url: 'https://www.wien.gv.at/menschen/armut/mindestsicherung/' },
+  { label: 'Sozialministerium — Sozialhilfe & Mindestsicherung', url: 'https://www.sozialministerium.gv.at/Themen/Soziales/Sozialhilfe-und-Mindestsicherung.html' },
+  { label: 'Arbeiterkammer Wien — Mindestsicherung', url: 'https://www.arbeiterkammer.at/' },
+];
 ---
 
-<Layout title={title} description={description} path="/mindestsicherung-wien/">
+<BundeslandLayout
+  land={land}
+  meta={meta}
+  datePublished="2026-01-15"
+  dateModified="2026-06-15"
+  standDatum="2026-01-01"
+  faq={faq}
+  quellen={quellen}
+  nachbarn={[]}
+>
 
-  <section class="hero container">
-    <p class="hero__kicker">Wien · Stand {STAND.datum}</p>
-    <h1 class="hero__title">Mindestsicherung Wien 2026</h1>
-    <p class="hero__lead">
-      Wien ist das einzige Bundesland, das das System weiterhin <strong>Mindestsicherung</strong> nennt — alle anderen Bundesländer haben auf den Begriff „Sozialhilfe" umgestellt. Die Wiener Mindestsicherung ergänzt das eigene Einkommen auf einen gesetzlich festgelegten Mindeststandard. Wer Anspruch hat, bekommt die Differenz zwischen dem eigenen Nettoeinkommen und dem Mindeststandard ausgezahlt.
+  <Fragment slot="intro">
+    <p>
+      Die Wiener Mindestsicherung ergänzt dein eigenes Einkommen auf einen gesetzlich
+      festgelegten Mindeststandard. 2026 liegt der Höchstsatz für Alleinstehende bei
+      <strong>1.229,89 € pro Monat</strong>, für Paare bei zusammen 1.721,85 €, dazu
+      332,07 € pro minderjährigem Kind. Ausgezahlt wird die Differenz zwischen deinem
+      anrechenbaren Nettoeinkommen und dem Mindeststandard.
     </p>
-  </section>
+    <p>
+      Wien ist das einzige Bundesland, das die Leistung weiterhin „Mindestsicherung"
+      nennt — in allen anderen Ländern heißt sie „Sozialhilfe". Rechne deinen
+      voraussichtlichen Betrag unten direkt aus (Stand 1. Jänner 2026).
+    </p>
+  </Fragment>
 
-  <section class="container section-rechner">
+  <Fragment slot="rechner">
     <Rechner client:load fixedBundesland="wien" />
-  </section>
+  </Fragment>
 
-  <section class="container content">
-
-    <h2>Aktuelle Beträge 2026</h2>
-    <div class="table-wrap">
-      <table class="saetze">
+  <!-- ===== Wie hoch ===== -->
+  <Fragment slot="hoehe">
+    <p>
+      Die folgenden Beträge sind <strong>Höchstsätze</strong>. Was tatsächlich ausgezahlt
+      wird, hängt vom Haushalt, vom anrechenbaren Einkommen und von den Wohnkosten ab.
+    </p>
+    <div class="bl-table-wrap">
+      <table class="bl-table">
         <thead>
           <tr>
             <th>Personengruppe</th>
@@ -35,92 +87,73 @@ const description = 'Mindestsicherung Wien 2026: Aktuelle Beträge, Voraussetzun
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Alleinstehend / Alleinerziehend (ab 25)</td>
-            <td class="num tabular">1.229,89 €</td>
-          </tr>
-          <tr>
-            <td>Person in Ehe, Partnerschaft oder WG (pro Person)</td>
-            <td class="num tabular">860,92 €</td>
-          </tr>
-          <tr>
-            <td>Paar / Lebensgemeinschaft (gesamt)</td>
-            <td class="num tabular">1.721,85 €</td>
-          </tr>
-          <tr>
-            <td>Pro minderjährigem Kind</td>
-            <td class="num tabular">332,07 €</td>
-          </tr>
-          <tr>
-            <td>Behindertenzuschlag (Behindertenpass § 40 BBG)</td>
-            <td class="num tabular">221,38 €</td>
-          </tr>
+          <tr><td>Alleinstehend / Alleinerziehend (ab 25)</td><td class="num">1.229,89 €</td></tr>
+          <tr><td>Person in Ehe, Partnerschaft oder WG (pro Person)</td><td class="num">860,92 €</td></tr>
+          <tr><td>Paar / Lebensgemeinschaft (gesamt)</td><td class="num">1.721,85 €</td></tr>
+          <tr><td>Pro minderjährigem Kind</td><td class="num">332,07 €</td></tr>
+          <tr><td>Behindertenzuschlag (Behindertenpass § 40 BBG)</td><td class="num">221,38 €</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="table-note">
-      <strong>Deckelung:</strong> Die Geldleistungen für Erwachsene in einem Haushalt sind mit 175 % des Höchstsatzes begrenzt, das entspricht rund 2.152,31 € pro Monat. Die Beträge werden 12-mal jährlich ausgezahlt, kein 13. oder 14. Monatsgehalt.
-    </p>
-
-    <h2>Was sich ab 1. Jänner 2026 geändert hat</h2>
-    <p>Die Wiener Mindestsicherung wurde zum 1. Jänner 2026 in mehreren Punkten geändert:</p>
-    <ul class="changes">
-      <li>
-        <strong>Subsidiär Schutzberechtigte</strong> erhalten keine Mindestsicherung mehr. Sie fallen ab sofort unter die Grundversorgung.
-      </li>
-      <li>
-        <strong>Elternzuschlag gestrichen:</strong> Der bisherige Zuschlag von rund 54 € pro volljähriger Person mit minderjährigen Kindern wurde ersatzlos gestrichen.
-      </li>
-      <li>
-        <strong>Wohnkostenanteil auch bei Kindern:</strong> Die Leistung wird einheitlich in 75 % Lebensunterhalt und 25 % Wohnbedarf aufgeteilt — jetzt auch für Kinder. Der Wohnanteil wird von einer allfälligen Mietbeihilfe abgezogen.
-      </li>
-      <li>
-        <strong>WGs wie Bedarfsgemeinschaften:</strong> Personen in Wohngemeinschaften erhalten denselben reduzierten Satz (70 %) wie Paare, nicht mehr den vollen Alleinstehenden-Satz.
-      </li>
-      <li>
-        <strong>Junge Erwachsene 18–25:</strong> Der erhöhte Satz gilt ab 2026 nur noch bei Ausbildung oder Erwerbstätigkeit. Die Teilnahme an AMS- oder Integrationsmaßnahmen reicht dafür nicht mehr aus.
-      </li>
-    </ul>
-
-    <h2>Voraussetzungen</h2>
-    <p>Um Mindestsicherung in Wien zu erhalten, müssen folgende Voraussetzungen erfüllt sein:</p>
-    <ul class="checks">
-      <li><strong>Wohnsitz in Wien</strong> (Hauptwohnsitz)</li>
-      <li><strong>Österreichische Staatsbürgerschaft</strong> oder gleichgestellter Status (EU/EWR-Bürger mit Aufenthaltsrecht, anerkannte Flüchtlinge nach Genfer Konvention)</li>
-      <li><strong>Hilfsbedürftigkeit:</strong> Das eigene Einkommen und verwertbare Vermögen reichen nicht aus, um den Mindestbedarf zu decken</li>
-      <li><strong>Mitwirkungspflicht:</strong> Aktive Bemühungen zur Verbesserung der eigenen Situation (z. B. Arbeitsuche, AMS-Anmeldung)</li>
-      <li>Mindestalter <strong>18 Jahre</strong> (Ausnahmen bei Alleinerziehenden unter 18)</li>
-    </ul>
-
-    <h3>Vermögensgrenze</h3>
     <p>
-      Verwertbares Vermögen (Sparbuch, Bargeld, Wertpapiere) bis <strong>7.379,34 € pro volljähriger Person</strong> wird nicht angerechnet. Darüber liegendes Vermögen muss grundsätzlich zuerst aufgebraucht werden.
+      <strong>Deckelung:</strong> Die Geldleistungen für Erwachsene in einem Haushalt sind
+      mit 175 % des Höchstsatzes begrenzt, das entspricht rund 2.152,31 € pro Monat. Die
+      Beträge werden 12-mal jährlich ausgezahlt, ohne 13. oder 14. Monatsbezug.
     </p>
-    <p>
-      <strong>Nicht angerechnet</strong> werden: selbst bewohnte Eigentumswohnung (Hauptwohnsitz), berufs- oder behinderungsbedingt notwendiges Fahrzeug, normale Wohnungseinrichtung.
-    </p>
-
-    <h2>Was nicht im Rechner enthalten ist: Mietbeihilfe</h2>
-    <div class="infobox">
+    <div class="bl-callout">
       <p>
-        Zusätzlich zur Mindestsicherung kann in Wien eine <strong>Mietbeihilfe</strong> beantragt werden. Diese wird separat berechnet und hängt von Miethöhe, Haushaltsgröße und Einkommen ab. Sie ist nicht Bestandteil des Rechners auf dieser Seite, weil die Berechnung stark vom Einzelfall abhängt.
-      </p>
-      <p>
-        Informationen zur Mietbeihilfe:
-        <a href="https://www.wien.gv.at/sozialinfo/" target="_blank" rel="noopener noreferrer">
-          MA 40 – Soziales, Sozial- und Gesundheitsrecht
-        </a>
+        <strong>Mietbeihilfe ist nicht im Rechner enthalten.</strong> Zusätzlich zur
+        Mindestsicherung kann in Wien eine Mietbeihilfe beantragt werden. Sie wird separat
+        berechnet und hängt stark vom Einzelfall ab (Miethöhe, Haushaltsgröße, Einkommen).
+        Infos bei der
+        <a href="https://www.wien.gv.at/sozialinfo/" target="_blank" rel="noopener noreferrer">MA 40</a>.
       </p>
     </div>
+  </Fragment>
 
-    <h2>So wird der Antrag gestellt</h2>
-    <ol class="steps">
+  <!-- ===== Wer hat Anspruch ===== -->
+  <Fragment slot="anspruch">
+    <p>Um Mindestsicherung in Wien zu erhalten, müssen folgende Voraussetzungen erfüllt sein:</p>
+    <ul>
+      <li><strong>Hauptwohnsitz in Wien</strong></li>
+      <li><strong>Österreichische Staatsbürgerschaft</strong> oder gleichgestellter Status (EU/EWR-Bürger mit Aufenthaltsrecht, anerkannte Flüchtlinge nach Genfer Konvention)</li>
+      <li><strong>Hilfsbedürftigkeit:</strong> Einkommen und verwertbares Vermögen reichen nicht aus, um den Mindestbedarf zu decken</li>
+      <li><strong>Mitwirkungspflicht:</strong> aktive Bemühungen zur Verbesserung der Situation (z. B. Arbeitsuche, AMS-Anmeldung)</li>
+      <li>Mindestalter <strong>18 Jahre</strong> (Ausnahmen bei Alleinerziehenden unter 18)</li>
+    </ul>
+    <h3>Vermögensgrenze</h3>
+    <p>
+      Verwertbares Vermögen (Sparbuch, Bargeld, Wertpapiere) bis
+      <strong>7.379,34 € pro volljähriger Person</strong> wird nicht angerechnet. Darüber
+      liegendes Vermögen muss grundsätzlich zuerst aufgebraucht werden.
+    </p>
+    <p>
+      <strong>Nicht angerechnet</strong> werden: selbst bewohnte Eigentumswohnung
+      (Hauptwohnsitz), berufs- oder behinderungsbedingt notwendiges Fahrzeug, normale
+      Wohnungseinrichtung.
+    </p>
+  </Fragment>
+
+  <!-- ===== Besonderheiten & Änderungen 2026 (PFLICHT-UNIKAT) ===== -->
+  <Fragment slot="besonderheiten">
+    <p>Die Wiener Mindestsicherung wurde zum 1. Jänner 2026 in mehreren Punkten geändert:</p>
+    <ul>
+      <li><strong>Subsidiär Schutzberechtigte</strong> erhalten keine Mindestsicherung mehr und fallen unter die Grundversorgung.</li>
+      <li><strong>Elternzuschlag gestrichen:</strong> der bisherige Zuschlag von rund 54 € pro volljähriger Person mit minderjährigen Kindern wurde ersatzlos gestrichen.</li>
+      <li><strong>Wohnkostenanteil auch bei Kindern:</strong> die Leistung wird einheitlich in 75 % Lebensunterhalt und 25 % Wohnbedarf aufgeteilt — jetzt auch für Kinder. Der Wohnanteil wird von einer allfälligen Mietbeihilfe abgezogen.</li>
+      <li><strong>WGs wie Bedarfsgemeinschaften:</strong> Personen in Wohngemeinschaften erhalten denselben reduzierten Satz (70 %) wie Paare, nicht mehr den vollen Alleinstehenden-Satz.</li>
+      <li><strong>Junge Erwachsene 18–25:</strong> der erhöhte Satz gilt nur noch bei Schul- oder Erwerbsausbildung oder Beschäftigung über der Geringfügigkeitsgrenze. AMS- oder Integrationsmaßnahmen allein reichen nicht mehr.</li>
+    </ul>
+  </Fragment>
+
+  <!-- ===== Beantragen ===== -->
+  <Fragment slot="antrag">
+    <ol>
+      <li><strong>Zuständige Stelle:</strong> Magistratsabteilung 40 (MA 40), Soziales, Sozial- und Gesundheitsrecht.</li>
       <li>
-        <strong>Zuständige Stelle:</strong> Magistratsabteilung 40 (MA 40), Soziales, Sozial- und Gesundheitsrecht
-      </li>
-      <li>
-        <strong>Antrag:</strong> Persönlich beim zuständigen Sozialzentrum nach Wohnbezirk, oder online unter
-        <a href="https://www.wien.gv.at" target="_blank" rel="noopener noreferrer">wien.gv.at</a>
+        <strong>Antrag:</strong> persönlich beim zuständigen Sozialzentrum nach Wohnbezirk
+        oder online über
+        <a href="https://www.wien.gv.at" target="_blank" rel="noopener noreferrer">wien.gv.at</a>.
       </li>
       <li>
         <strong>Unterlagen mitbringen:</strong>
@@ -133,230 +166,23 @@ const description = 'Mindestsicherung Wien 2026: Aktuelle Beträge, Voraussetzun
           <li>Bei Kindern: Geburtsurkunden, Unterhaltstitel</li>
         </ul>
       </li>
-      <li><strong>Bearbeitungsdauer:</strong> In der Regel 4 bis 6 Wochen</li>
+      <li><strong>Bearbeitungsdauer:</strong> in der Regel 4 bis 6 Wochen. In dringenden Fällen ist eine Soforthilfe möglich.</li>
     </ol>
+  </Fragment>
 
-    <h2>Häufige Fragen zur Wiener Mindestsicherung</h2>
-
-    <div class="faq">
-      <div class="faq__item">
-        <h3>Kann ich Mindestsicherung und Arbeit kombinieren?</h3>
-        <p>Ja. Erwerbseinkommen wird nur teilweise angerechnet. Ein Freibetrag von derzeit bis zu 20 % des Einkommens bleibt anrechnungsfrei, um einen Anreiz zur Erwerbstätigkeit zu erhalten.</p>
-      </div>
-      <div class="faq__item">
-        <h3>Was passiert, wenn ich Mindestsicherung beziehe und eine Erbschaft mache?</h3>
-        <p>Erbschaften zählen als Vermögen und werden nach Abzug des Freibetrags (7.379,34 € pro volljähriger Person) auf die Mindestsicherung angerechnet.</p>
-      </div>
-      <div class="faq__item">
-        <h3>Zählt Familienbeihilfe als Einkommen?</h3>
-        <p>Die Familienbeihilfe wird in der Regel nicht als Einkommen angerechnet.</p>
-      </div>
-      <div class="faq__item">
-        <h3>Was ist, wenn mein Antrag abgelehnt wird?</h3>
-        <p>Gegen einen ablehnenden Bescheid kann Beschwerde beim Verwaltungsgericht Wien eingelegt werden. Die Beschwerdefrist beträgt 4 Wochen ab Zustellung.</p>
-      </div>
-    </div>
-
-    <h2>Offizielle Stellen und Beratung</h2>
-    <ul class="sources">
-      <li>
-        <strong>MA 40 Wien:</strong>
-        <a href="https://www.wien.gv.at/sozialinfo/" target="_blank" rel="noopener noreferrer">wien.gv.at/sozialinfo</a>
-      </li>
-      <li><strong>Volkshilfe Wien – Sozialberatung:</strong> kostenlose Beratung für Betroffene</li>
-      <li><strong>Caritas Wien:</strong> Sozialberatungsstellen in allen Bezirken</li>
-      <li><strong>AK Wien – Sozialrechtsberatung:</strong> kostenlos für Arbeitnehmer</li>
-    </ul>
-
-    <p class="disclaimer">
-      Unverbindliche Orientierung, keine Rechts- oder Sozialberatung. Maßgeblich sind die zuständigen Stellen der Stadt Wien. Stand: Jänner 2026.
+  <!-- ===== Auszahlung & Termine ===== -->
+  <Fragment slot="auszahlung">
+    <p>
+      Die Wiener Mindestsicherung wird <strong>12-mal jährlich</strong> von der MA 40
+      angewiesen — monatlich, ohne 13. oder 14. Bezug. Die Gutschrift erfolgt in der Regel
+      zu <strong>Monatsbeginn</strong> (1. Werktag des Monats), bei Wochenenden oder
+      Feiertagen am nächsten Werktag.
     </p>
+    <p>
+      Alle voraussichtlichen Termine für 2026 findest du auf der Seite
+      <a href="/auszahlungstermine/">Auszahlungstermine 2026</a>. Maßgeblich ist immer der
+      Bescheid, den du von der MA 40 erhalten hast.
+    </p>
+  </Fragment>
 
-  </section>
-
-  <style>
-    .hero {
-      padding-top: clamp(40px, 8vw, 80px);
-      padding-bottom: 0;
-    }
-    .hero__kicker {
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--color-grey-400);
-      margin: 0 0 12px;
-    }
-    .hero__title {
-      font-size: clamp(28px, 5.5vw, 48px);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      color: var(--color-grey-900);
-      margin: 0 0 16px;
-    }
-    .hero__lead {
-      font-size: clamp(16px, 2vw, 18px);
-      color: var(--color-grey-600);
-      line-height: 1.6;
-      max-width: 56ch;
-      margin: 0;
-    }
-
-    .section-rechner { margin-top: 64px; }
-
-    .content { margin-top: 64px; padding-bottom: 64px; }
-
-    .content h2 {
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      color: var(--color-grey-900);
-      margin: 48px 0 12px;
-    }
-    .content h2:first-child { margin-top: 0; }
-    .content h3 {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--color-grey-800);
-      margin: 24px 0 8px;
-    }
-    .content p {
-      font-size: 15px;
-      color: var(--color-grey-600);
-      line-height: 1.6;
-      max-width: 60ch;
-      margin: 0 0 12px;
-    }
-
-    /* Tabelle */
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--color-grey-100);
-      border-radius: 10px;
-      background: #fff;
-    }
-    .saetze {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    .saetze th, .saetze td {
-      padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--color-grey-100);
-    }
-    .saetze tr:last-child td { border-bottom: none; }
-    .saetze th {
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--color-grey-500);
-      background: var(--color-grey-50);
-    }
-    .saetze td { color: var(--color-grey-700); }
-    .saetze .num { text-align: right; white-space: nowrap; font-weight: 600; color: var(--color-grey-900); }
-    .tabular { font-variant-numeric: tabular-nums; }
-    .table-note {
-      font-size: 14px;
-      color: var(--color-grey-500);
-      margin: 12px 0 0;
-      max-width: 60ch;
-    }
-
-    /* Listen */
-    .changes, .checks, .sources {
-      padding-left: 20px;
-      margin: 0 0 12px;
-    }
-    .changes li, .checks li, .sources li {
-      font-size: 15px;
-      color: var(--color-grey-600);
-      line-height: 1.6;
-      margin-bottom: 10px;
-      max-width: 58ch;
-    }
-
-    /* Antrag-Schritte */
-    .steps {
-      padding-left: 20px;
-      margin: 0 0 12px;
-    }
-    .steps > li {
-      font-size: 15px;
-      color: var(--color-grey-600);
-      line-height: 1.6;
-      margin-bottom: 12px;
-      max-width: 58ch;
-    }
-    .sub {
-      margin-top: 8px;
-      padding-left: 18px;
-    }
-    .sub li {
-      font-size: 14px;
-      color: var(--color-grey-500);
-      margin-bottom: 4px;
-    }
-
-    /* Infobox Mietbeihilfe */
-    .infobox {
-      background: var(--color-primary-50);
-      border-left: 4px solid var(--color-primary-200);
-      padding: 16px 18px;
-      border-radius: 4px;
-    }
-    .infobox p { margin: 0 0 8px; }
-    .infobox p:last-child { margin: 0; }
-    .infobox a {
-      color: var(--color-primary-600);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    /* FAQ */
-    .faq {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 12px;
-    }
-    .faq__item {
-      background: #fff;
-      border: 1px solid var(--color-grey-100);
-      border-radius: 10px;
-      padding: 16px 18px;
-    }
-    .faq__item h3 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--color-grey-800);
-      margin: 0 0 6px;
-    }
-    .faq__item p {
-      font-size: 14px;
-      color: var(--color-grey-600);
-      line-height: 1.55;
-      margin: 0;
-      max-width: none;
-    }
-
-    /* Quellen */
-    .sources a {
-      color: var(--color-primary-600);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-
-    /* Disclaimer */
-    .disclaimer {
-      margin-top: 48px;
-      font-size: 13px;
-      color: var(--color-grey-400);
-      font-style: italic;
-      border-top: 1px solid var(--color-grey-100);
-      padding-top: 20px;
-    }
-  </style>
-</Layout>
+</BundeslandLayout>
