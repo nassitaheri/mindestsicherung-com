@@ -1,0 +1,183 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { BUNDESLAENDER, BUNDESLAND_REIHENFOLGE } from '../data/saetze-2026';
+
+const title = 'Mindestsicherung & Sozialhilfe nach Bundesland 2026 | mindestsicherung.com';
+const description =
+  'Mindestsicherung und Sozialhilfe unterscheiden sich je Bundesland. Übersicht aller neun Länder 2026 mit Status. Wien ist vollständig geprüft, weitere folgen.';
+
+// Nur fertige Länder werden verlinkt (Punkt 10 der Vorlage).
+const detailSeiten: Record<string, string> = {
+  wien: '/mindestsicherung-wien/',
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Start', item: 'https://mindestsicherung.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Bundesländer', item: 'https://mindestsicherung.com/bundeslaender/' },
+  ],
+};
+---
+
+<Layout title={title} description={description} path="/bundeslaender/">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumb)} />
+  </Fragment>
+
+  <section class="hero container">
+    <p class="kicker">Österreich · 2026</p>
+    <h1>Mindestsicherung &amp; Sozialhilfe nach Bundesland</h1>
+    <p class="lead">
+      Seit dem Sozialhilfe-Grundsatzgesetz gibt der Bund nur Höchstsätze vor — die neun
+      Bundesländer setzen sie eigenständig um und dürfen bei Kindern, Zuschlägen und
+      Wohnkosten abweichen. Wähle dein Bundesland. Wien ist im Rechner vollständig geprüft,
+      die übrigen Länder sind in Arbeit.
+    </p>
+  </section>
+
+  <section class="container">
+    <ul class="laender-grid" role="list">
+      {BUNDESLAND_REIHENFOLGE.map((slug) => {
+        const land = BUNDESLAENDER[slug];
+        const href = detailSeiten[slug];
+        const verfuegbar = Boolean(href);
+        const Tag = verfuegbar ? 'a' : 'div';
+        return (
+          <li>
+            <Tag
+              class={`laender-card ${verfuegbar ? 'laender-card--live' : 'laender-card--wip'}`}
+              {...(verfuegbar ? { href } : {})}
+            >
+              <div class="laender-card__body">
+                <span class="laender-card__name">{land.name}</span>
+                <span class="laender-card__sys">{land.systemName}</span>
+              </div>
+              {verfuegbar ? (
+                <span class="badge badge--live">Verfügbar</span>
+              ) : (
+                <span class="badge badge--wip">In Arbeit</span>
+              )}
+            </Tag>
+          </li>
+        );
+      })}
+    </ul>
+
+    <p class="note">
+      „In Arbeit" heißt: die Werte für dieses Bundesland werden noch gegen die offizielle
+      Landesquelle geprüft, bevor eine eigene Seite online geht. Für eine erste Orientierung
+      kannst du den <a href="/">Rechner</a> nutzen — er weist nicht geprüfte Länder klar aus.
+    </p>
+  </section>
+
+  <style>
+    .hero {
+      padding-top: clamp(40px, 8vw, 80px);
+      padding-bottom: 0;
+      margin-bottom: 40px;
+    }
+    .kicker {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-grey-400);
+      margin: 0 0 12px;
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5.5vw, 44px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--color-grey-900);
+      margin: 0 0 16px;
+    }
+    .lead {
+      font-size: clamp(16px, 2vw, 18px);
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      max-width: 62ch;
+      margin: 0;
+    }
+
+    .laender-grid {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    @media (max-width: 480px) {
+      .laender-grid { grid-template-columns: 1fr; }
+    }
+    .laender-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--color-grey-100);
+      border-radius: 10px;
+      font-size: 14px;
+      text-decoration: none;
+      transition: box-shadow 120ms ease, border-color 120ms ease;
+    }
+    .laender-card--live {
+      background: var(--color-primary-50);
+      border-color: var(--color-primary-200);
+    }
+    .laender-card--live:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-color: var(--color-primary-300);
+    }
+    .laender-card--wip { opacity: 0.85; }
+    .laender-card__body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .laender-card__name {
+      font-weight: 600;
+      color: var(--color-grey-800);
+    }
+    .laender-card__sys {
+      font-size: 12px;
+      color: var(--color-grey-400);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 7px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .badge--live {
+      background: var(--color-primary-100);
+      color: var(--color-primary-700);
+    }
+    .badge--wip {
+      background: var(--color-amber-100);
+      color: var(--color-amber-700);
+    }
+
+    .note {
+      margin-top: 24px;
+      font-size: 14px;
+      color: var(--color-grey-500);
+      line-height: 1.6;
+      max-width: 62ch;
+    }
+    .note a {
+      color: var(--color-primary-600);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  </style>
+</Layout>

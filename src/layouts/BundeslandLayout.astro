@@ -1,0 +1,476 @@
+---
+/**
+ * ============================================================================
+ *  BundeslandLayout — wiederverwendbares Gerüst für jede Bundesland-Seite
+ * ============================================================================
+ *
+ *  Setzt docs/bundesland-seiten-vorlage.md strukturell durch:
+ *   - feste Heading-Reihenfolge (Punkt 3)
+ *   - Pflicht-Sektionen als benannte Slots (Punkt 4)
+ *   - E-E-A-T-Footer (Punkt 6)
+ *   - JSON-LD @graph: Breadcrumb + Article(dateModified) + FAQPage (Punkt 7)
+ *   - interne Verlinkung (Punkt 8)
+ *
+ *  Inhalte kommen pro Land über Slots (eindeutige Prosa → Duplicate-Content-
+ *  Schutz, Punkt 5) und Props (strukturierte Daten, die in JSON-LD UND Markup
+ *  identisch sein müssen, z.B. FAQ).
+ *
+ *  Benannte Slots, die jede Landesseite füllt:
+ *    intro · rechner · hoehe · anspruch · besonderheiten · antrag · auszahlung
+ * ============================================================================
+ */
+import Layout from './Layout.astro';
+import type { Bundesland } from '../data/saetze-2026';
+
+type FaqItem = { frage: string; antwort: string };
+type Quelle = { label: string; url: string };
+type Nachbar = { name: string; href: string };
+
+interface Props {
+  land: Bundesland;
+  meta: { title: string; description: string };
+  /** ISO-Datum (YYYY-MM-DD) */
+  datePublished: string;
+  /** ISO-Datum (YYYY-MM-DD) — der Frische-Hebel, bei jedem Update mitziehen */
+  dateModified: string;
+  /** Stand der Sätze (für sichtbaren E-E-A-T-Footer), ISO */
+  standDatum: string;
+  faq: FaqItem[];
+  quellen: Quelle[];
+  /** Weiterführende interne Links (Nachbarländer o.ä.) */
+  nachbarn?: Nachbar[];
+  autor?: string;
+  autorRolle?: string;
+}
+
+const {
+  land,
+  meta,
+  datePublished,
+  dateModified,
+  standDatum,
+  faq,
+  quellen,
+  nachbarn = [],
+  autor = 'Amir Taheri',
+  autorRolle = 'Betreiber von mindestsicherung.com',
+} = Astro.props;
+
+const path = `/mindestsicherung-${land.slug}/`;
+const url = `https://mindestsicherung.com${path}`;
+const h1 = `${land.systemName} ${land.name} 2026: Höhe, Anspruch & Antrag`;
+
+// --- Österreichische Datumsformatierung (Jänner statt Januar) ----------------
+const AT_MONATE = [
+  'Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni',
+  'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
+];
+function formatAT(iso: string): string {
+  const [j, m, t] = iso.split('-').map(Number);
+  return `${t}. ${AT_MONATE[m - 1]} ${j}`;
+}
+const standLesbar = formatAT(standDatum);
+const aktualisiertLesbar = formatAT(dateModified);
+
+// --- JSON-LD @graph (Punkt 7) ------------------------------------------------
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Start', item: 'https://mindestsicherung.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Bundesländer', item: 'https://mindestsicherung.com/bundeslaender/' },
+        { '@type': 'ListItem', position: 3, name: land.name, item: url },
+      ],
+    },
+    {
+      '@type': 'Article',
+      headline: h1,
+      description: meta.description,
+      datePublished,
+      dateModified,
+      inLanguage: 'de-AT',
+      author: { '@type': 'Person', name: autor, url: 'https://mindestsicherung.com/ueber-uns/' },
+      publisher: {
+        '@type': 'Organization',
+        name: 'mindestsicherung.com',
+        logo: { '@type': 'ImageObject', url: 'https://mindestsicherung.com/favicon.svg' },
+      },
+      mainEntityOfPage: url,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({
+        '@type': 'Question',
+        name: f.frage,
+        acceptedAnswer: { '@type': 'Answer', text: f.antwort },
+      })),
+    },
+  ],
+};
+const jsonLdString = JSON.stringify(jsonLd);
+---
+
+<Layout title={meta.title} description={meta.description} path={path}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLdString} />
+  </Fragment>
+
+  <article class="bl container">
+
+    <!-- ===== H1 + Intro + Rechner-CTA (Punkt 3) ===== -->
+    <header class="bl-hero">
+      <p class="bl-kicker">{land.name} · Stand {standLesbar}</p>
+      <h1 class="bl-h1">{h1}</h1>
+      <div class="bl-intro"><slot name="intro" /></div>
+    </header>
+
+    <div class="bl-rechner">
+      <slot name="rechner" />
+    </div>
+
+    <!-- ===== Pflicht-Sektionen in fester Reihenfolge ===== -->
+    <section class="bl-section">
+      <h2>Wie hoch ist die {land.systemName} in {land.name} 2026?</h2>
+      <slot name="hoehe" />
+    </section>
+
+    <section class="bl-section">
+      <h2>Wer hat Anspruch in {land.name}?</h2>
+      <slot name="anspruch" />
+    </section>
+
+    <section class="bl-section">
+      <h2>Besonderheiten &amp; Änderungen 2026 in {land.name}</h2>
+      <slot name="besonderheiten" />
+    </section>
+
+    <section class="bl-section">
+      <h2>{land.systemName} in {land.name} beantragen</h2>
+      <slot name="antrag" />
+    </section>
+
+    <section class="bl-section">
+      <h2>Auszahlung &amp; Termine in {land.name}</h2>
+      <slot name="auszahlung" />
+    </section>
+
+    <!-- ===== Häufige Fragen (speist FAQ-Schema) ===== -->
+    <section class="bl-section">
+      <h2>Häufige Fragen ({land.name})</h2>
+      <div class="bl-faq">
+        {faq.map((f) => (
+          <details class="bl-faq__item">
+            <summary>{f.frage}</summary>
+            <p>{f.antwort}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- ===== Interne Verlinkung (Punkt 8) ===== -->
+    <nav class="bl-weiter" aria-label="Weiterführende Seiten">
+      <h2 class="bl-weiter__title">Weiterführend</h2>
+      <ul>
+        <li><a href="/">Mindestsicherung berechnen (alle Bundesländer)</a></li>
+        <li><a href="/ratgeber/">Ratgeber: Antrag, Unterlagen &amp; Voraussetzungen</a></li>
+        <li><a href="/auszahlungstermine/">Auszahlungstermine 2026</a></li>
+        <li><a href="/bundeslaender/">Übersicht aller Bundesländer</a></li>
+        {nachbarn.map((n) => (
+          <li><a href={n.href}>{n.name}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- ===== E-E-A-T-Footer (Punkt 6, identischer Aufbau je Seite) ===== -->
+    <footer class="bl-eeat">
+      <p class="bl-eeat__stand">
+        Stand: {standLesbar} · Zuletzt aktualisiert: {aktualisiertLesbar}
+      </p>
+
+      <div class="bl-eeat__block">
+        <span class="bl-eeat__label">Quellen</span>
+        <ul class="bl-eeat__quellen">
+          {quellen.map((q) => (
+            <li><a href={q.url} target="_blank" rel="noopener noreferrer">{q.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <p class="bl-eeat__autor">
+        Autor: <strong>{autor}</strong>, {autorRolle} ·
+        <a href="/ueber-uns/">Über uns</a>
+      </p>
+
+      <p class="bl-eeat__hinweis">
+        mindestsicherung.com ist ein unabhängiges, privates Informationsangebot und
+        keine Behörde. Die Berechnung ist eine Orientierung, ohne Gewähr und ohne
+        Rechtsberatung. Verbindlich ist allein der Bescheid der zuständigen Stelle.
+      </p>
+    </footer>
+
+  </article>
+</Layout>
+
+<style is:global>
+  /* ==========================================================================
+     Gemeinsame Bundesland-Seiten-Styles (.bl …)
+     Damit alle Landesseiten ohne CSS-Duplizierung identisch aussehen.
+     ========================================================================== */
+  .bl { padding-bottom: 64px; }
+
+  .bl-hero { padding-top: clamp(40px, 8vw, 80px); }
+  .bl-kicker {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-grey-400);
+    margin: 0 0 12px;
+  }
+  .bl-h1 {
+    font-size: clamp(28px, 5.2vw, 44px);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--color-grey-900);
+    margin: 0 0 16px;
+  }
+  .bl-intro p {
+    font-size: clamp(16px, 2vw, 18px);
+    color: var(--color-grey-600);
+    line-height: 1.6;
+    max-width: 60ch;
+    margin: 0 0 12px;
+  }
+
+  .bl-rechner { margin-top: 40px; }
+
+  .bl-section { margin-top: 56px; }
+  .bl-section > h2 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-grey-900);
+    margin: 0 0 14px;
+  }
+  .bl-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-grey-800);
+    margin: 24px 0 8px;
+  }
+  .bl-section p {
+    font-size: 15px;
+    color: var(--color-grey-600);
+    line-height: 1.6;
+    max-width: 62ch;
+    margin: 0 0 12px;
+  }
+  .bl-section a {
+    color: var(--color-primary-600);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .bl-section ul,
+  .bl-section ol {
+    padding-left: 20px;
+    margin: 0 0 12px;
+  }
+  .bl-section li {
+    font-size: 15px;
+    color: var(--color-grey-600);
+    line-height: 1.6;
+    margin-bottom: 8px;
+    max-width: 60ch;
+  }
+  .bl-section ul.sub {
+    margin-top: 8px;
+  }
+  .bl-section ul.sub li {
+    font-size: 14px;
+    color: var(--color-grey-500);
+    margin-bottom: 4px;
+  }
+
+  /* Sätze-Tabelle (gemeinsamer Look über alle Länder) */
+  .bl-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--color-grey-100);
+    border-radius: 10px;
+    background: #fff;
+    margin-bottom: 12px;
+  }
+  .bl-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .bl-table th,
+  .bl-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-grey-100);
+  }
+  .bl-table tr:last-child td { border-bottom: none; }
+  .bl-table th {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-grey-500);
+    background: var(--color-grey-50);
+  }
+  .bl-table td { color: var(--color-grey-700); }
+  .bl-table .num {
+    text-align: right;
+    white-space: nowrap;
+    font-weight: 600;
+    color: var(--color-grey-900);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Info-/Hinweis-Callout */
+  .bl-callout {
+    background: var(--color-primary-50);
+    border-left: 4px solid var(--color-primary-200);
+    padding: 16px 18px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  .bl-callout p { margin: 0 0 8px; max-width: none; }
+  .bl-callout p:last-child { margin: 0; }
+
+  /* FAQ (details/summary) */
+  .bl-faq {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bl-faq__item {
+    background: #fff;
+    border: 1px solid var(--color-grey-100);
+    border-radius: 10px;
+    padding: 4px 18px;
+  }
+  .bl-faq__item summary {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-grey-800);
+    line-height: 1.4;
+    padding: 14px 0;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .bl-faq__item summary::-webkit-details-marker { display: none; }
+  .bl-faq__item summary::after {
+    content: '+';
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--color-primary-500);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .bl-faq__item[open] summary::after { content: '−'; }
+  .bl-faq__item p {
+    font-size: 14px;
+    color: var(--color-grey-600);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0 0 16px;
+    max-width: none;
+  }
+
+  /* Weiterführend */
+  .bl-weiter {
+    margin-top: 56px;
+    background: var(--color-grey-50);
+    border: 1px solid var(--color-grey-100);
+    border-radius: 12px;
+    padding: 20px 22px;
+  }
+  .bl-weiter__title {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-grey-400);
+    margin: 0 0 12px;
+  }
+  .bl-weiter ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bl-weiter a {
+    font-size: 14px;
+    color: var(--color-primary-600);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* E-E-A-T-Footer */
+  .bl-eeat {
+    margin-top: 48px;
+    border-top: 1px solid var(--color-grey-100);
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .bl-eeat__stand {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-grey-600);
+    margin: 0;
+  }
+  .bl-eeat__label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-grey-400);
+    margin-bottom: 6px;
+  }
+  .bl-eeat__quellen {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .bl-eeat__quellen a {
+    font-size: 13px;
+    color: var(--color-primary-600);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .bl-eeat__autor {
+    font-size: 13px;
+    color: var(--color-grey-600);
+    margin: 0;
+  }
+  .bl-eeat__autor a {
+    color: var(--color-primary-600);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .bl-eeat__hinweis {
+    font-size: 13px;
+    color: var(--color-grey-400);
+    font-style: italic;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 64ch;
+  }
+</style>

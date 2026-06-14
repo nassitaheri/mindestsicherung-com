@@ -55,10 +55,10 @@ const heutigesJahr = new Date().getFullYear();
           mindestsicherung<span class="brand__tld">.com</span>
         </a>
         <nav class="site-nav" aria-label="Hauptnavigation">
-          <a href="/">Rechner</a>
-          <a href="/mindestsicherung-wien/">Wien</a>
-          <a href="/faq/">FAQ</a>
-          <a href="/auszahlungstermine/">Termine</a>
+          <a href="/">Mindestsicherung berechnen</a>
+          <a href="/bundeslaender/">Bundesländer</a>
+          <a href="/ratgeber/">Ratgeber</a>
+          <a href="/ueber-uns/">Über uns</a>
         </nav>
       </div>
     </header>
@@ -115,6 +115,8 @@ const heutigesJahr = new Date().getFullYear();
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap;
+        row-gap: 10px;
         padding-top: 14px;
         padding-bottom: 14px;
       }
@@ -131,9 +133,13 @@ const heutigesJahr = new Date().getFullYear();
       }
       .site-nav {
         display: flex;
-        gap: 20px;
+        flex-wrap: wrap;
+        gap: 8px 18px;
         font-size: 14px;
         font-weight: 500;
+      }
+      @media (max-width: 560px) {
+        .site-nav { width: 100%; }
       }
       .site-nav a {
         color: var(--color-grey-600);

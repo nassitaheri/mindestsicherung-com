@@ -1,0 +1,144 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = 'Über uns | mindestsicherung.com';
+const description =
+  'Wer hinter mindestsicherung.com steht: Amir Taheri. Ein unabhängiges, privates Informationsangebot zur Mindestsicherung in Österreich — keine Behörde.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'AboutPage',
+      name: 'Über uns — mindestsicherung.com',
+      url: 'https://mindestsicherung.com/ueber-uns/',
+      inLanguage: 'de-AT',
+      publisher: {
+        '@type': 'Organization',
+        name: 'mindestsicherung.com',
+        logo: { '@type': 'ImageObject', url: 'https://mindestsicherung.com/favicon.svg' },
+      },
+    },
+    {
+      '@type': 'Person',
+      name: 'Amir Taheri',
+      url: 'https://mindestsicherung.com/ueber-uns/',
+      jobTitle: 'Betreiber von mindestsicherung.com',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Wien',
+        addressCountry: 'AT',
+      },
+    },
+  ],
+};
+---
+
+<Layout title={title} description={description} path="/ueber-uns/">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  <section class="container legal">
+    <h1>Über uns</h1>
+    <p class="legal__intro">Wer hinter mindestsicherung.com steht und wofür diese Seite da ist.</p>
+
+    <div class="notice">
+      <strong>mindestsicherung.com ist ein unabhängiges, privates Informationsangebot
+      und keine Behörde.</strong> Wir bieten eine Orientierung, keine Rechts- oder
+      Sozialberatung. Verbindlich ist allein der Bescheid der zuständigen Stelle.
+    </div>
+
+    <h2>Wer dahintersteht</h2>
+    <p>
+      Diese Seite wird von <strong>Amir Taheri</strong> betrieben — als privates Projekt
+      aus Wien. Ich bin Grafikdesigner und habe mindestsicherung.com gestartet, weil die
+      offiziellen Informationen zur Mindestsicherung oft schwer zu finden, juristisch
+      formuliert und über viele Stellen verteilt sind. Ziel ist eine ruhige, werbearm
+      gehaltene Seite, die in zwei Minuten eine erste, ehrliche Orientierung gibt.
+    </p>
+
+    <h2>Wofür diese Seite da ist</h2>
+    <p>
+      mindestsicherung.com erklärt die Mindestsicherung und Sozialhilfe in Österreich und
+      bietet einen kostenlosen Rechner für eine unverbindliche Schätzung. Die Seite ersetzt
+      keine Behörde und keine Beratung — sie soll den ersten Schritt erleichtern und auf die
+      richtigen offiziellen Stellen verweisen.
+    </p>
+
+    <h2>Wie wir mit Zahlen umgehen</h2>
+    <p>
+      Die Sätze ändern sich jährlich, einzelne Länder auch unterjährig. Wir arbeiten nach
+      dem Prinzip <strong>System statt Gedächtnis</strong>: Alle Werte stehen an einer
+      einzigen, dokumentierten Stelle und werden gegen offizielle Quellen geprüft, bevor ein
+      Bundesland online geht. Was noch nicht geprüft ist, wird im Rechner und in der
+      Bundesländer-Übersicht klar als „in Prüfung" bzw. „in Arbeit" ausgewiesen — lieber
+      ehrlich offen als falsch sicher.
+    </p>
+
+    <h2>Unabhängigkeit &amp; Finanzierung</h2>
+    <p>
+      Die Seite ist unabhängig und steht in keiner Verbindung zu einer Behörde. Der Betrieb
+      wird über Werbeanzeigen (Google AdSense) finanziert. Eingaben im Rechner werden
+      ausschließlich lokal im Browser verarbeitet und nicht an einen Server übertragen —
+      Details in der <a href="/datenschutz/">Datenschutzerklärung</a>.
+    </p>
+
+    <h2>Kontakt</h2>
+    <p>
+      Hinweise, Korrekturen oder Fehler in den Zahlen?
+      <a href="mailto:kontakt@mindestsicherung.com">kontakt@mindestsicherung.com</a> —
+      Korrekturhinweise sind ausdrücklich willkommen. Rechtliche Angaben im
+      <a href="/impressum/">Impressum</a>.
+    </p>
+  </section>
+
+  <style>
+    .legal {
+      padding-top: clamp(32px, 6vw, 64px);
+      padding-bottom: 64px;
+    }
+    .legal h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-grey-900);
+      margin: 0 0 8px;
+    }
+    .legal__intro {
+      font-size: 15px;
+      color: var(--color-grey-500);
+      margin: 0 0 32px;
+      max-width: 60ch;
+    }
+    .notice {
+      background: var(--color-primary-50);
+      border-left: 4px solid var(--color-primary-300);
+      border-radius: 4px;
+      padding: 16px 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--color-primary-700);
+      margin-bottom: 40px;
+      max-width: 64ch;
+    }
+    .legal h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-grey-800);
+      margin: 36px 0 8px;
+    }
+    .legal p {
+      font-size: 15px;
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      max-width: 62ch;
+      margin: 0;
+    }
+    .legal a {
+      color: var(--color-primary-600);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  </style>
+</Layout>
