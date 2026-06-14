@@ -1,0 +1,445 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = 'Mindestsicherung FAQ 2026 – Häufige Fragen & Antworten';
+const description = 'Antworten auf die häufigsten Fragen zur Mindestsicherung und Sozialhilfe in Österreich 2026: Vermögen, Anrechnung, Arbeit, Kinder, Antrag und mehr.';
+
+// Backtick-String vermeidet Konflikte mit deutschen Anführungszeichen im JSON
+const faqSchemaJson = `{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Was ist der Unterschied zwischen Mindestsicherung und Sozialhilfe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Inhaltlich dasselbe System, nur der Name ist unterschiedlich. Wien nennt es weiterhin Mindestsicherung, alle anderen acht Bundeslaender haben auf Sozialhilfe umgestellt. Die Leistung funktioniert ueberall gleich: Sie ergaenzt das eigene Einkommen auf einen gesetzlich festgelegten Mindeststandard."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wer hat Anspruch auf Mindestsicherung?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Grundsaetzlich alle Personen, die ihren Hauptwohnsitz im jeweiligen Bundesland haben, oesterreichische Staatsbueger sind oder einen gleichgestellten Status haben (EU/EWR-Buerger mit Aufenthaltsrecht, anerkannte Fluechtlinge), hilfsbeduertig sind (Einkommen und Vermoegen reichen nicht aus), und an Massnahmen zur Selbsthilfe mitwirken (z. B. Arbeitsuche)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie viel bekommt man 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Der Hoechstsatz fuer Alleinstehende betraegt 2026 1.229,89 Euro pro Monat. Fuer Paare je 860,92 Euro (gesamt 1.721,85 Euro). Pro minderjaehrigem Kind kommen je nach Bundesland zwischen 200 und 332 Euro dazu."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange kann man Mindestsicherung beziehen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Es gibt keine gesetzliche Hoechstbezugsdauer. Die Leistung wird so lange gewaehrt, wie die Voraussetzungen erfuellt sind. Sie wird in der Regel jaehrlich neu ueberprueft."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kann man Mindestsicherung und Arbeit kombinieren?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. Erwerbseinkommen wird nicht zur Gaenze angerechnet. Ein Teil des Einkommens bleibt anrechnungsfrei, um einen Anreiz zur Erwerbstaetigkeit zu schaffen. In Wien sind es derzeit bis zu 20 % des Erwerbseinkommens."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was gilt als anrechenbares Einkommen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Angerechnet werden: Lohn und Gehalt, Arbeitslosengeld, Notstandshilfe, Krankengeld, Pension, Unterhaltszahlungen, Mieteinnahmen. Nicht angerechnet werden: Familienbeihilfe, Kinderbetreuungsgeld, Pflegegeld, Wohnbeihilfe."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was passiert, wenn ich einen Job annehme?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Das Erwerbseinkommen wird auf die Mindestsicherung angerechnet, ein Freibetrag bleibt erhalten. Sie muessen die Aufnahme einer Beschaeftigung umgehend melden. Verschweigen Sie Einkommen, riskieren Sie eine Rueckforderung."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Muss ich jeden Job annehmen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Es besteht eine Mitwirkungspflicht: Sie muessen zumutbare Beschaeftigungsangebote annehmen. Zumutbar beruecksichtigt Qualifikation, Gesundheitszustand, Betreuungspflichten und Pendelzeit. Die genauen Regelungen sind je nach Bundesland unterschiedlich."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie viel Erspartes darf ich haben?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Der Vermoegensfreibetrag betraegt 7.379,34 Euro pro volljaehriger Person im Haushalt. Vermoegen darueber muss grundsaetzlich zuerst aufgebraucht werden, bevor Mindestsicherung gewaehrt wird."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Zaehlt mein Auto als Vermoegen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ein privat genutztes Auto wird in der Regel angerechnet, sofern es nicht berufs- oder behinderungsbedingt notwendig ist. Ein einfaches Fahrzeug fuer die Arbeitswegfahrt wird meist toleriert, ein Luxusfahrzeug nicht."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Zaehlt die eigene Wohnung als Vermoegen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Eine selbst bewohnte Eigentumswohnung oder ein selbst bewohntes Haus (Hauptwohnsitz) wird nicht angerechnet. Ferienwohnungen oder vermietete Immobilien hingegen schon."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was passiert bei einer Erbschaft?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Eine Erbschaft gilt als Vermoegenszugang und wird nach Abzug des Freibetrags angerechnet. Sie sind verpflichtet, eine Erbschaft unverzueglich zu melden."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Bekomme ich mehr, wenn ich Kinder habe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. Pro minderjaehrigem Kind wird ein zusaetzlicher Betrag gewaehrt. In Wien betraegt der Kindersatz derzeit 332,07 Euro pro Kind, unabhaengig von der Kinderzahl."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Zaehlt Unterhalt als Einkommen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, Unterhaltszahlungen werden als Einkommen angerechnet. Erhalten Sie keinen Unterhalt, obwohl ein Anspruch besteht, sind Sie verpflichtet, diesen gerichtlich geltend zu machen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was gilt fuer Alleinerziehende?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Alleinerziehende erhalten in der Regel den vollen Hoechstsatz (1.229,89 Euro) plus den Kindersatz pro Kind. In Wien wurde ein Alleinerziehenden-Zuschlag per 1. Jaenner 2026 gestrichen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wo stelle ich den Antrag?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Der Antrag wird bei der zustaendigen Behoerde des Bundeslandes gestellt, in dem Sie Ihren Hauptwohnsitz haben. In Wien ist das die MA 40. In anderen Bundeslaendern sind es die Bezirkshauptmannschaften oder Gemeindenaemter."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Welche Unterlagen brauche ich?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In der Regel: Lichtbildausweis, Meldezettel, Einkommensnachweise (Gehaltszettel, AMS-Bescheid), Kontoauszuege der letzten 3 Monate, Mietvertrag, bei Kindern Geburtsurkunden. Die genaue Liste haengt vom Bundesland ab."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange dauert die Bearbeitung?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In der Regel 4 bis 6 Wochen. In dringenden Faellen kann eine Soforthilfe beantragt werden."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was tun, wenn der Antrag abgelehnt wird?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Gegen einen ablehnenden Bescheid kann innerhalb von 4 Wochen Beschwerde beim zustaendigen Verwaltungsgericht eingelegt werden. Kostenlose Beratung bieten AK, Caritas, Volkshilfe und andere Sozialorganisationen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was gilt fuer EU-Buerger?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "EU- und EWR-Buerger haben grundsaetzlich dann Anspruch, wenn sie ein dauerhaftes Aufenthaltsrecht in Oesterreich haben (in der Regel nach 5 Jahren rechtmaessigem Aufenthalt) oder erwerbstaetig sind bzw. waren."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was gilt fuer anerkannte Fluechtlinge?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Personen mit Asylstatus (Konventionsflueehtlinge) sind oesterreichischen Staatsburgern gleichgestellt und haben vollen Anspruch auf Mindestsicherung."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was gilt fuer subsidiaer Schutzberechtigte?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ab 1. Jaenner 2026 haben subsidiaer Schutzberechtigte in Wien keinen Anspruch mehr auf Mindestsicherung. Sie erhalten stattdessen Leistungen aus der Grundversorgung."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was gilt fuer Studierende?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Studierende haben grundsaetzlich eingeschraenkten Anspruch. Wer Studienbeihilfe bezieht oder beziehen koennte, wird in der Regel auf diese verwiesen. Die genauen Regelungen sind je nach Bundesland unterschiedlich."
+      }
+    }
+  ]
+}`;
+---
+
+<Layout title={title} description={description} path="/faq/">
+  <script type="application/ld+json" set:html={faqSchemaJson} slot="head" />
+
+  <section class="hero container">
+    <p class="hero__kicker">Österreich · Stand Jänner 2026</p>
+    <h1 class="hero__title">Häufige Fragen zur Mindestsicherung</h1>
+    <p class="hero__lead">
+      Hier finden Sie Antworten auf die häufigsten Fragen zur Mindestsicherung und Sozialhilfe in Österreich. Die Regeln unterscheiden sich je nach Bundesland — die Antworten beziehen sich, sofern nicht anders angegeben, auf die allgemeinen bundesweiten Regelungen bzw. Wien.
+    </p>
+  </section>
+
+  <section class="container content">
+
+    <h2>Grundlagen</h2>
+    <div class="faq">
+      <div class="faq__item">
+        <h3>Was ist der Unterschied zwischen Mindestsicherung und Sozialhilfe?</h3>
+        <p>Inhaltlich dasselbe System, nur der Name ist unterschiedlich. Wien nennt es weiterhin „Mindestsicherung", alle anderen acht Bundesländer haben auf „Sozialhilfe" umgestellt. Die Leistung funktioniert überall gleich: Sie ergänzt das eigene Einkommen auf einen gesetzlich festgelegten Mindeststandard.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Wer hat Anspruch auf Mindestsicherung?</h3>
+        <p>Grundsätzlich alle Personen, die:</p>
+        <ul>
+          <li>ihren Hauptwohnsitz im jeweiligen Bundesland haben,</li>
+          <li>österreichische Staatsbürger sind oder einen gleichgestellten Status haben (EU/EWR-Bürger mit Aufenthaltsrecht, anerkannte Flüchtlinge),</li>
+          <li>hilfsbedürftig sind (Einkommen und Vermögen reichen nicht aus),</li>
+          <li>an Maßnahmen zur Selbsthilfe mitwirken (z. B. Arbeitsuche).</li>
+        </ul>
+      </div>
+      <div class="faq__item">
+        <h3>Wie viel bekommt man 2026?</h3>
+        <p>Der Höchstsatz für Alleinstehende beträgt 2026 <strong>1.229,89 € pro Monat</strong>. Für Paare je 860,92 € (gesamt 1.721,85 €). Pro minderjährigem Kind kommen je nach Bundesland zwischen 200 und 332 € dazu. Der Rechner auf der <a href="/">Startseite</a> berechnet Ihren individuellen Orientierungsbetrag.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Wie lange kann man Mindestsicherung beziehen?</h3>
+        <p>Es gibt keine gesetzliche Höchstbezugsdauer. Die Leistung wird so lange gewährt, wie die Voraussetzungen erfüllt sind. Sie wird in der Regel jährlich neu überprüft.</p>
+      </div>
+    </div>
+
+    <h2>Einkommen &amp; Arbeit</h2>
+    <div class="faq">
+      <div class="faq__item">
+        <h3>Kann man Mindestsicherung und Arbeit kombinieren?</h3>
+        <p>Ja. Erwerbseinkommen wird nicht zur Gänze angerechnet. Ein Teil des Einkommens bleibt anrechnungsfrei, um einen Anreiz zur Erwerbstätigkeit zu schaffen. Die genaue Höhe des Freibetrags regelt jedes Bundesland selbst — in Wien sind es derzeit bis zu 20 % des Erwerbseinkommens.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Was gilt als anrechenbares Einkommen?</h3>
+        <p><strong>Angerechnet</strong> werden unter anderem: Lohn und Gehalt, Arbeitslosengeld, Notstandshilfe, Krankengeld, Pension, Unterhaltszahlungen, Mieteinnahmen.</p>
+        <p><strong>Nicht angerechnet</strong> werden in der Regel: Familienbeihilfe, Kinderbetreuungsgeld, Pflegegeld, Wohnbeihilfe.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Was passiert, wenn ich einen Job annehme?</h3>
+        <p>Das Erwerbseinkommen wird auf die Mindestsicherung angerechnet, ein Freibetrag bleibt jedoch erhalten. Sie müssen die Aufnahme einer Beschäftigung umgehend der zuständigen Stelle melden. Verschweigen Sie Einkommen, riskieren Sie eine Rückforderung.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Muss ich jeden Job annehmen?</h3>
+        <p>Es besteht eine Mitwirkungspflicht: Sie müssen zumutbare Beschäftigungsangebote annehmen. „Zumutbar" berücksichtigt Qualifikation, Gesundheitszustand, Betreuungspflichten und Pendelzeit. Die genauen Regelungen sind je nach Bundesland unterschiedlich.</p>
+      </div>
+    </div>
+
+    <h2>Vermögen</h2>
+    <div class="faq">
+      <div class="faq__item">
+        <h3>Wie viel Erspartes darf ich haben?</h3>
+        <p>Der Vermögensfreibetrag beträgt <strong>7.379,34 € pro volljähriger Person</strong> im Haushalt. Vermögen darüber muss grundsätzlich zuerst aufgebraucht werden, bevor Mindestsicherung gewährt wird.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Zählt mein Auto als Vermögen?</h3>
+        <p>Ein privat genutztes Auto wird in der Regel angerechnet, sofern es nicht berufs- oder behinderungsbedingt notwendig ist. Ein einfaches Fahrzeug für die Arbeitswegfahrt wird meist toleriert, ein Luxusfahrzeug nicht. Die genaue Beurteilung liegt beim zuständigen Sozialamt.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Zählt die eigene Wohnung als Vermögen?</h3>
+        <p>Eine selbst bewohnte Eigentumswohnung oder ein selbst bewohntes Haus (Hauptwohnsitz) wird <strong>nicht</strong> angerechnet. Ferienwohnungen oder vermietete Immobilien hingegen schon.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Was passiert bei einer Erbschaft?</h3>
+        <p>Eine Erbschaft gilt als Vermögenszugang und wird nach Abzug des Freibetrags angerechnet. Sie sind verpflichtet, eine Erbschaft unverzüglich zu melden.</p>
+      </div>
+    </div>
+
+    <h2>Kinder &amp; Familie</h2>
+    <div class="faq">
+      <div class="faq__item">
+        <h3>Bekomme ich mehr, wenn ich Kinder habe?</h3>
+        <p>Ja. Pro minderjährigem Kind wird ein zusätzlicher Betrag gewährt. Die Höhe variiert je nach Bundesland. In Wien beträgt der Kindersatz derzeit <strong>332,07 € pro Kind</strong>, unabhängig von der Kinderzahl.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Zählt Unterhalt als Einkommen?</h3>
+        <p>Ja, Unterhaltszahlungen werden als Einkommen angerechnet. Erhalten Sie keinen Unterhalt, obwohl ein Anspruch besteht, sind Sie verpflichtet, diesen gerichtlich geltend zu machen. Das Sozialamt kann Sie dabei auf den Unterhaltsvorschuss verweisen.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Was gilt für Alleinerziehende?</h3>
+        <p>Alleinerziehende erhalten in der Regel den vollen Höchstsatz (1.229,89 €) plus den Kindersatz pro Kind. In manchen Bundesländern gibt es zusätzlich einen Alleinerziehenden-Zuschlag. In Wien wurde dieser Zuschlag per 1. Jänner 2026 gestrichen.</p>
+      </div>
+    </div>
+
+    <h2>Antrag &amp; Verfahren</h2>
+    <div class="faq">
+      <div class="faq__item">
+        <h3>Wo stelle ich den Antrag?</h3>
+        <p>Der Antrag wird bei der zuständigen Behörde des Bundeslandes gestellt, in dem Sie Ihren Hauptwohnsitz haben. In Wien ist das die <strong>MA 40</strong>. In anderen Bundesländern sind es die Bezirkshauptmannschaften oder Gemeindeämter.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Welche Unterlagen brauche ich?</h3>
+        <p>In der Regel:</p>
+        <ul>
+          <li>Lichtbildausweis</li>
+          <li>Meldezettel</li>
+          <li>Einkommensnachweise (Gehaltszettel, AMS-Bescheid)</li>
+          <li>Kontoauszüge der letzten 3 Monate</li>
+          <li>Mietvertrag</li>
+          <li>Bei Kindern: Geburtsurkunden</li>
+        </ul>
+        <p>Die genaue Liste hängt vom Bundesland ab.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Wie lange dauert die Bearbeitung?</h3>
+        <p>In der Regel <strong>4 bis 6 Wochen</strong>. In dringenden Fällen kann eine Soforthilfe beantragt werden.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Was tun, wenn der Antrag abgelehnt wird?</h3>
+        <p>Gegen einen ablehnenden Bescheid kann innerhalb von <strong>4 Wochen</strong> Beschwerde beim zuständigen Verwaltungsgericht eingelegt werden. Kostenlose Beratung bieten AK, Caritas, Volkshilfe und andere Sozialorganisationen.</p>
+      </div>
+    </div>
+
+    <h2>Besondere Situationen</h2>
+    <div class="faq">
+      <div class="faq__item">
+        <h3>Was gilt für EU-Bürger?</h3>
+        <p>EU- und EWR-Bürger haben grundsätzlich dann Anspruch, wenn sie ein dauerhaftes Aufenthaltsrecht in Österreich haben (in der Regel nach 5 Jahren rechtmäßigem Aufenthalt) oder erwerbstätig sind bzw. waren.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Was gilt für anerkannte Flüchtlinge?</h3>
+        <p>Personen mit Asylstatus (Konventionsflüchtlinge) sind österreichischen Staatsbürgern gleichgestellt und haben vollen Anspruch auf Mindestsicherung.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Was gilt für subsidiär Schutzberechtigte?</h3>
+        <p>Ab 1. Jänner 2026 haben subsidiär Schutzberechtigte in Wien <strong>keinen Anspruch mehr</strong> auf Mindestsicherung. Sie erhalten stattdessen Leistungen aus der Grundversorgung.</p>
+      </div>
+      <div class="faq__item">
+        <h3>Was gilt für Studierende?</h3>
+        <p>Studierende haben grundsätzlich eingeschränkten Anspruch. Wer Studienbeihilfe bezieht oder beziehen könnte, wird in der Regel auf diese verwiesen. Die genauen Regelungen sind je nach Bundesland unterschiedlich.</p>
+      </div>
+    </div>
+
+    <p class="disclaimer">
+      Unverbindliche Orientierung, keine Rechts- oder Sozialberatung. Maßgeblich sind die zuständigen Behörden des jeweiligen Bundeslandes. Stand: Jänner 2026.
+    </p>
+
+  </section>
+
+  <style>
+    .hero {
+      padding-top: clamp(40px, 8vw, 80px);
+      padding-bottom: 0;
+    }
+    .hero__kicker {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-grey-400);
+      margin: 0 0 12px;
+    }
+    .hero__title {
+      font-size: clamp(28px, 5.5vw, 48px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--color-grey-900);
+      margin: 0 0 16px;
+    }
+    .hero__lead {
+      font-size: clamp(16px, 2vw, 18px);
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      max-width: 56ch;
+      margin: 0;
+    }
+
+    .content { margin-top: 56px; padding-bottom: 64px; }
+
+    .content h2 {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--color-grey-900);
+      margin: 48px 0 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--color-grey-100);
+    }
+    .content h2:first-child { margin-top: 0; }
+
+    .faq {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 0;
+    }
+    .faq__item {
+      background: #fff;
+      border: 1px solid var(--color-grey-100);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .faq__item h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-grey-800);
+      margin: 0 0 8px;
+      line-height: 1.4;
+    }
+    .faq__item p {
+      font-size: 14px;
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      margin: 0 0 8px;
+      max-width: none;
+    }
+    .faq__item p:last-child { margin: 0; }
+    .faq__item ul {
+      padding-left: 18px;
+      margin: 6px 0 8px;
+    }
+    .faq__item li {
+      font-size: 14px;
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      margin-bottom: 3px;
+    }
+    .faq__item a {
+      color: var(--color-primary-600);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .disclaimer {
+      margin-top: 48px;
+      font-size: 13px;
+      color: var(--color-grey-400);
+      font-style: italic;
+      border-top: 1px solid var(--color-grey-100);
+      padding-top: 20px;
+    }
+  </style>
+</Layout>

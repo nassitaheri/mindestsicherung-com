@@ -1,0 +1,253 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = 'Mindestsicherung Auszahlungstermine 2026 – Wann kommt das Geld?';
+const description = 'Wann wird die Mindestsicherung und Sozialhilfe 2026 ausgezahlt? Alle Auszahlungstermine für Wien und Österreich auf einen Blick.';
+
+const termine = [
+  { monat: 'Jänner 2026',    datum: '2. Jänner (Freitag)' },
+  { monat: 'Februar 2026',   datum: '2. Februar (Montag)' },
+  { monat: 'März 2026',      datum: '2. März (Montag)' },
+  { monat: 'April 2026',     datum: '1. April (Mittwoch)' },
+  { monat: 'Mai 2026',       datum: '4. Mai (Montag)' },
+  { monat: 'Juni 2026',      datum: '1. Juni (Montag)' },
+  { monat: 'Juli 2026',      datum: '1. Juli (Mittwoch)' },
+  { monat: 'August 2026',    datum: '3. August (Montag)' },
+  { monat: 'September 2026', datum: '1. September (Dienstag)' },
+  { monat: 'Oktober 2026',   datum: '1. Oktober (Donnerstag)' },
+  { monat: 'November 2026',  datum: '2. November (Montag)' },
+  { monat: 'Dezember 2026',  datum: '1. Dezember (Dienstag)' },
+];
+
+const heute = new Date();
+const aktuellerMonat = heute.getMonth(); // 0-based
+const aktuell = aktuellerMonat; // Jänner = 0
+---
+
+<Layout title={title} description={description} path="/auszahlungstermine/">
+
+  <section class="hero container">
+    <p class="hero__kicker">Wien · 2026</p>
+    <h1 class="hero__title">Mindestsicherung Auszahlungstermine 2026</h1>
+    <p class="hero__lead">
+      Die Mindestsicherung bzw. Sozialhilfe wird <strong>12-mal jährlich</strong> ausgezahlt — monatlich, kein 13. oder 14. Monatsgehalt. In Wien erfolgt die Auszahlung in der Regel zum <strong>1. Werktag des Monats</strong>, bei Wochenenden oder Feiertagen am nächsten Werktag.
+    </p>
+  </section>
+
+  <section class="container content">
+
+    <h2>Wien: Auszahlungstermine 2026</h2>
+    <p>In Wien wird die Mindestsicherung monatlich von der MA 40 angewiesen. Die Gutschrift auf dem Konto erfolgt in der Regel am 1. Werktag des Monats.</p>
+
+    <div class="table-wrap">
+      <table class="termine-tabelle">
+        <thead>
+          <tr>
+            <th>Monat</th>
+            <th>Voraussichtliche Auszahlung</th>
+          </tr>
+        </thead>
+        <tbody>
+          {termine.map((t, i) => (
+            <tr class={i === aktuell ? 'aktuell' : ''}>
+              <td>{t.monat}</td>
+              <td class="datum">{t.datum}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="hinweis">
+      <p>
+        <strong>Hinweis:</strong> Die genauen Termine werden von der MA 40 festgelegt und können leicht abweichen. Maßgeblich ist der Bescheid, den Sie von der MA 40 erhalten haben. Bei Fragen wenden Sie sich direkt an Ihr zuständiges Sozialzentrum.
+      </p>
+    </div>
+
+    <h2>Andere Bundesländer</h2>
+    <p>
+      In den anderen Bundesländern gelten ähnliche Regelungen: Die Sozialhilfe wird monatlich ausgezahlt, in der Regel zu Monatsbeginn. Die genauen Termine variieren je nach Bundesland und Behörde.
+    </p>
+    <ul class="bl-liste">
+      <li><strong>Niederösterreich:</strong> Auszahlung in der Regel am 1. des Monats, bei Feiertagen/Wochenende am nächsten Werktag.</li>
+      <li><strong>Oberösterreich, Steiermark, Kärnten, Salzburg, Tirol, Vorarlberg, Burgenland:</strong> Monatliche Auszahlung zu Monatsbeginn. Genaue Termine erfragen Sie bei der zuständigen Bezirkshauptmannschaft.</li>
+    </ul>
+
+    <h2>Was tun, wenn die Zahlung ausbleibt?</h2>
+    <ol class="steps">
+      <li>
+        <strong>Zuerst warten:</strong> Banklaufzeiten und interne Bearbeitungszeiten können 1 bis 2 Werktage in Anspruch nehmen.
+      </li>
+      <li>
+        <strong>Kontoverbindung prüfen:</strong> Ist die bei der Behörde hinterlegte IBAN noch aktuell?
+      </li>
+      <li>
+        <strong>Zuständige Stelle kontaktieren:</strong> In Wien die MA 40 unter <a href="tel:+4314000-8040">+43 1 4000-8040</a>, in anderen Bundesländern die zuständige Bezirkshauptmannschaft.
+      </li>
+      <li>
+        <strong>Bescheid prüfen:</strong> Hat sich an Ihrem Bescheid etwas geändert? Lagen Sanktionen oder ein Überprüfungsverfahren vor?
+      </li>
+    </ol>
+
+    <h2>Auszahlung bei Erstantrag</h2>
+    <p>
+      Bei einem Erstantrag beginnt die Auszahlung frühestens ab dem Monat der Antragstellung, <strong>nicht rückwirkend</strong>. Die Bearbeitung dauert in der Regel 4 bis 6 Wochen. In dringenden Fällen kann bei der Behörde eine <strong>Soforthilfe</strong> beantragt werden, die schneller ausgezahlt wird.
+    </p>
+
+    <h2>Bankverbindung ändern</h2>
+    <p>
+      Eine Änderung der Bankverbindung muss der zuständigen Behörde <strong>schriftlich und rechtzeitig</strong> mitgeteilt werden — idealerweise mindestens 2 Wochen vor dem nächsten Auszahlungstermin. In Wien geht das über das zuständige Sozialzentrum oder online über
+      <a href="https://www.wien.gv.at" target="_blank" rel="noopener noreferrer">wien.gv.at</a>.
+    </p>
+
+    <p class="disclaimer">
+      Unverbindliche Orientierung, keine Rechts- oder Sozialberatung. Maßgeblich sind die zuständigen Behörden des jeweiligen Bundeslandes. Stand: Jänner 2026.
+    </p>
+
+  </section>
+
+  <style>
+    .hero {
+      padding-top: clamp(40px, 8vw, 80px);
+      padding-bottom: 0;
+    }
+    .hero__kicker {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-grey-400);
+      margin: 0 0 12px;
+    }
+    .hero__title {
+      font-size: clamp(28px, 5.5vw, 48px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--color-grey-900);
+      margin: 0 0 16px;
+    }
+    .hero__lead {
+      font-size: clamp(16px, 2vw, 18px);
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      max-width: 56ch;
+      margin: 0;
+    }
+
+    .content { margin-top: 56px; padding-bottom: 64px; }
+
+    .content h2 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--color-grey-900);
+      margin: 48px 0 12px;
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content p {
+      font-size: 15px;
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      max-width: 60ch;
+      margin: 0 0 12px;
+    }
+
+    /* Tabelle */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--color-grey-100);
+      border-radius: 10px;
+      background: #fff;
+      margin-bottom: 12px;
+    }
+    .termine-tabelle {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .termine-tabelle th,
+    .termine-tabelle td {
+      padding: 11px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-grey-100);
+    }
+    .termine-tabelle tr:last-child td { border-bottom: none; }
+    .termine-tabelle th {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-grey-500);
+      background: var(--color-grey-50);
+    }
+    .termine-tabelle td { color: var(--color-grey-700); }
+    .termine-tabelle .datum { font-weight: 600; color: var(--color-grey-900); }
+    .termine-tabelle tr.aktuell td {
+      background: var(--color-primary-50);
+      color: var(--color-primary-700);
+    }
+    .termine-tabelle tr.aktuell .datum { color: var(--color-primary-700); }
+
+    /* Hinweis-Box */
+    .hinweis {
+      background: var(--color-grey-50);
+      border: 1px solid var(--color-grey-100);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .hinweis p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--color-grey-600);
+      max-width: none;
+    }
+
+    /* Listen */
+    .bl-liste {
+      padding-left: 20px;
+      margin: 0 0 12px;
+    }
+    .bl-liste li {
+      font-size: 15px;
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      margin-bottom: 8px;
+      max-width: 58ch;
+    }
+
+    /* Schritte */
+    .steps {
+      padding-left: 20px;
+      margin: 0 0 12px;
+    }
+    .steps li {
+      font-size: 15px;
+      color: var(--color-grey-600);
+      line-height: 1.6;
+      margin-bottom: 10px;
+      max-width: 58ch;
+    }
+    .steps a {
+      color: var(--color-primary-600);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .content a {
+      color: var(--color-primary-600);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .disclaimer {
+      margin-top: 48px;
+      font-size: 13px;
+      color: var(--color-grey-400);
+      font-style: italic;
+      border-top: 1px solid var(--color-grey-100);
+      padding-top: 20px;
+    }
+  </style>
+</Layout>
