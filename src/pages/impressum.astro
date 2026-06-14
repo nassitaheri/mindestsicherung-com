@@ -2,44 +2,40 @@
 import Layout from '../layouts/Layout.astro';
 
 const title = 'Impressum | mindestsicherung.com';
-const description = 'Impressum und Offenlegung nach §5 ECG.';
+const description = 'Impressum und Offenlegung nach §5 ECG (E-Commerce-Gesetz).';
 ---
 
 <Layout title={title} description={description} path="/impressum/">
   <section class="container legal">
     <h1>Impressum</h1>
-    <p class="placeholder">
-      <strong>Platzhalter.</strong> Diese Seite muss vor dem Live-Schalten der
-      Domain mit den korrekten Daten gefüllt werden.
-    </p>
+    <p class="legal__intro">Angaben gemäß § 5 ECG (E-Commerce-Gesetz)</p>
 
-    <h2>Medieninhaber, Herausgeber, Verleger</h2>
+    <h2>Medieninhaber &amp; inhaltlich Verantwortlicher</h2>
     <p>
-      [Vor- und Nachname / Firmenwortlaut]<br />
-      [Straße und Hausnummer]<br />
-      [PLZ Ort]<br />
-      Österreich
+      Amir Taheri<br />
+      Magdalenenstraße 3–7/1/15<br />
+      1060 Wien, Österreich
     </p>
 
     <h2>Kontakt</h2>
     <p>
-      E-Mail: [E-Mail-Adresse]<br />
-      Telefon: [optional]
+      E-Mail:
+      <a href="mailto:kontakt@mindestsicherung.com">kontakt@mindestsicherung.com</a>
     </p>
 
-    <h2>Unternehmensgegenstand</h2>
+    <h2>Haftungsausschluss</h2>
     <p>
-      Bereitstellung von redaktionellen Informationen und einem Online-Rechner
-      zum Thema Mindestsicherung / Sozialhilfe in Österreich.
+      Die Inhalte dieser Website dienen ausschließlich der allgemeinen Information.
+      Sie stellen keine Rechts-, Sozial- oder Steuerberatung dar. Für die
+      Richtigkeit, Vollständigkeit und Aktualität der Inhalte wird keine Gewähr
+      übernommen. Maßgeblich sind stets die zuständigen Behörden und Stellen des
+      jeweiligen Bundeslandes.
     </p>
 
-    <h2>Rechtliche Hinweise</h2>
+    <h2>Urheberrecht</h2>
     <p>
-      Die Inhalte dieser Website werden mit größter Sorgfalt erstellt, eine Gewähr
-      für Aktualität, Richtigkeit und Vollständigkeit kann jedoch nicht übernommen
-      werden. Die Inhalte ersetzen keine Rechts- oder Sozialberatung. Verbindliche
-      Auskünfte erteilen ausschließlich die zuständigen Stellen des jeweiligen
-      Bundeslandes.
+      Die auf dieser Website veröffentlichten Inhalte unterliegen dem
+      österreichischen Urheberrecht.
     </p>
 
     <h2>Online-Streitbeilegung</h2>
@@ -55,29 +51,37 @@ const description = 'Impressum und Offenlegung nach §5 ECG.';
   <style>
     .legal {
       padding-top: clamp(32px, 6vw, 64px);
-      max-width: 720px;
+      padding-bottom: 64px;
     }
     .legal h1 {
-      font-family: var(--font-display);
       font-size: clamp(28px, 5vw, 40px);
+      font-weight: 700;
       letter-spacing: -0.02em;
-      margin: 0 0 24px;
+      color: var(--color-grey-900);
+      margin: 0 0 8px;
+    }
+    .legal__intro {
+      font-size: 14px;
+      color: var(--color-grey-400);
+      margin: 0 0 40px;
     }
     .legal h2 {
-      font-family: var(--font-display);
-      font-size: 20px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-grey-800);
       margin: 36px 0 8px;
     }
     .legal p {
-      color: var(--color-ink-soft);
+      font-size: 15px;
+      color: var(--color-grey-600);
       line-height: 1.6;
       max-width: 60ch;
+      margin: 0;
     }
-    .placeholder {
-      background: var(--color-warn-soft);
-      border-left: 3px solid var(--color-warn);
-      padding: 12px 14px;
-      border-radius: 4px;
+    .legal a {
+      color: var(--color-primary-600);
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
   </style>
 </Layout>
