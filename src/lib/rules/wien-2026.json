@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "bundesland": "wien",
+    "jahr": 2026,
+    "stand": "2026-06-15",
+    "zweck": "Verbindliche Regel-Werte fuer den Wien-Rechner. Quelle der Wahrheit fuer die Berechnung. Abgeleitet aus docs/seed/wien-2026-seed.json.",
+    "regeln_fuer_diese_datei": [
+      "KEINE Sozialleistungs-Betraege erfinden. Werte mit status NEEDS_OFFICIAL_VALUE bleiben null, bis sie aus offizieller Quelle (RIS WMG / MA 40) ergaenzt sind.",
+      "Wien-Komponentensumme 1229.88 ist fuer den Rechner verbindlich, nicht der gerundete Bundes-Hoechstsatz 1229.89 (Rundungsregel, siehe mindeststandard_alleinstehend_gesamt.hinweis).",
+      "erwerbstaetigenfreibetrag ist als anrechnungsfreier ANTEIL (Bruchzahl 0..1) des Erwerbseinkommens definiert. Solange null: kein Freibetrag, konservativer 1:1-Abzug."
+    ],
+    "quellen": {
+      "ak_wien": "https://wien.arbeiterkammer.at/beratung/arbeitundrecht/arbeitslosigkeit/Mindestsicherung.html",
+      "sozialberatung_wien": "https://www.sozialberatungwien.at/berechnung/",
+      "ma40_sozialinfo": "https://sozialinfo.wien.at/content/de/10/InstitutionDetail.do?it_1=2102082",
+      "ris_wmg": "https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=LrW&Gesetzesnummer=20000246",
+      "sozialministerium": "https://www.sozialministerium.gv.at/Themen/Soziales/Sozialhilfe-und-Mindestsicherung/Leistungen.html"
+    }
+  },
+
+  "stand": "2026-06-15",
+
+  "rules": {
+    "mindeststandard_alleinstehend_gesamt": {
+      "wert": 1229.88,
+      "lebensunterhalt": 922.41,
+      "wohnkostenanteil": 307.47,
+      "quelle": "ak_wien",
+      "hinweis": "Wien-Komponentensumme = 922.41 + 307.47 = 1229.88. Bundes-Hoechstsatz = 1229.89 (Rundung). Fuer den Wien-Rechner ist 1229.88 verbindlich."
+    },
+    "mindeststandard_paar_gesamt": { "wert": 1721.84, "faktor": 1.4, "quelle": "ak_wien", "hinweis": "2 x 70 % = 2 x 860.92 = 1721.84." },
+    "mindeststandard_70prozent": { "wert": 860.92, "quelle": "sozialberatung_wien", "hinweis": "2. volljaehrige Person in Bedarfsgemeinschaft (70 % des Mindeststandards)." },
+    "mindeststandard_45prozent": { "wert": 553.45, "quelle": "sozialministerium", "hinweis": "ab 3. volljaehriger Person (45 %). Im aktuellen Rechnermodell nicht aktiv (siehe Abweichung E)." },
+    "mindeststandard_kind": { "wert": 332.07, "quelle": "ak_wien" },
+    "behindertenzuschlag": { "wert": 221.38, "quelle": "sozialberatung_wien" },
+    "vermoegensfreibetrag_pro_person": { "wert": 7379.34, "quelle": "ma40_sozialinfo" },
+    "deckel_175prozent_volljaehrige": { "wert": 2152.31, "quelle": "sozialministerium", "hinweis": "Obergrenze fuer Summe aller volljaehrigen Personen einer Haushaltsgemeinschaft." },
+    "elternzuschlag": { "wert": 0, "quelle": "sozialberatung_wien", "hinweis": "Mit 31.12.2025 ersatzlos abgeschafft (war rund 54 EUR pro Elternteil)." },
+    "aufteilung_lebensunterhalt_anteil": { "wert": 0.75, "quelle": "sozialberatung_wien" },
+    "aufteilung_wohnbedarf_anteil": { "wert": 0.25, "quelle": "sozialberatung_wien" },
+
+    "erwerbstaetigenfreibetrag": {
+      "wert": null,
+      "status": "NEEDS_OFFICIAL_VALUE",
+      "quelle": "ris_wmg",
+      "hinweis": "Abweichung B. Anrechnungsfreier Anteil des Erwerbseinkommens (Bruchzahl 0..1). Exakte Wiener Regel aus WMG bzw. MA 40. NICHT raten. ACHTUNG: nicht mit dem deutschen Buergergeld-Freibetrag (20/30/10 %) und nicht mit dem Mindestbetrag (20 % Ausgleichszulagenrichtsatz) verwechseln."
+    },
+    "unter25_reduzierter_satz_ohne_ausbildung": {
+      "wert": null,
+      "status": "NEEDS_OFFICIAL_VALUE",
+      "quelle": "ris_wmg",
+      "hinweis": "Abweichung C. Absoluter EUR-Betrag des reduzierten Mindeststandards fuer 18-25 ohne Schul-/Erwerbsausbildung oder Beschaeftigung ueber Geringfuegigkeit. Exakter Betrag aus WMG/MA 40."
+    },
+    "subsidiaer_schutzberechtigt_anspruch": {
+      "wert": false,
+      "quelle": "sozialministerium",
+      "hinweis": "Abweichung A. 2026 kein Anspruch auf Wiener Mindestsicherung, Verweis auf Grundversorgung. Harter Ausschluss in der Logik."
+    }
+  }
+}

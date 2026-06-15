@@ -1,0 +1,27 @@
+name: Tests
+
+# Golden-Master-Tests des Rechners. Läuft bei jedem Push und PR.
+# Ein roter Job hält einen kaputten Rechner vom Merge/Deploy ab.
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Rechner-Golden-Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Tests ausführen
+        run: npm test

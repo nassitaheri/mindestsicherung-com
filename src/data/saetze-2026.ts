@@ -125,7 +125,10 @@ const WIEN: Bundesland = {
   systemName: 'Mindestsicherung',
   status: 'verified',
   saetze: {
-    alleinstehend: 1229.89,
+    // Rundungsregel: Wien-Komponentensumme 922,41 + 307,47 = 1229,88 ist für den
+    // Wien-Rechner verbindlich, NICHT der gerundete Bundes-Höchstsatz 1229,89.
+    // Quelle der Wahrheit für die Wien-Berechnung ist src/lib/rules/wien-2026.json.
+    alleinstehend: 1229.88,
     gemeinschaft: 860.92,
     kindFlach: 332.07,
     behindertenzuschlag: 221.38,

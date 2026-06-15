@@ -8,6 +8,26 @@ Quelle der Wahrheit für jede Korrektur: **Stadt Wien / MA 40** und **Sozialmini
 
 ---
 
+## Update 15. Juni 2026 — Golden-Tests, CI & die Fixes A/B/C
+
+Seit diesem Durchgang ist der Rechner maschinell abgesichert:
+
+- **Regel-Datei als Quelle der Wahrheit:** `src/lib/rules/wien-2026.json` (aus `docs/seed/wien-2026-seed.json`). Die Rechenlogik (`src/lib/calc.ts`, Funktion `berechneMitRegeln`) enthält **keine hartcodierten Beträge** mehr — jeder Wert kommt aus dieser Datei.
+- **Golden-Master-Tests** (`src/lib/__tests__/wien-2026.golden.test.ts`) + **CI** (`.github/workflows/test.yml`): `npm test` läuft bei jedem Push/PR. Rot = Merge/Deploy gestoppt.
+- **Rundungsregel dokumentiert:** Wien-Alleinstehend = Komponentensumme **1.229,88 €** (922,41 + 307,47) ist für den Wien-Rechner verbindlich, **nicht** der gerundete Bundes-Höchstsatz 1.229,89 €. `saetze-2026.ts` wurde entsprechend auf 1.229,88 korrigiert (mit Kommentar).
+
+Stand der drei Korrektheits-Punkte:
+
+| Punkt | Vorher | Jetzt |
+|---|---|---|
+| **A** subsidiär | nur Text-Hinweis | **in der Logik umgesetzt** (harter Ausschluss) + Checkbox in der Wien-UI. Aktiver Test grün. |
+| **B** Erwerbstätigenfreibetrag | 1:1-Abzug, kein Mechanismus | **Mechanik verdrahtet**, liest `erwerbstaetigenfreibetrag` aus der Regel-Datei. Wert noch `null` → konservativ 1:1 **plus sichtbarer Hinweis**. Richtung per aktivem Mechanik-Test gesichert, exakter Wert als `it.todo`. |
+| **C** unter-25 reduziert | voller Satz | **Mechanik verdrahtet**, liest `unter25_reduzierter_satz_ohne_ausbildung`. Wert noch `null` → voller Satz **plus Hinweis**. Richtung per Test gesichert, exakter Wert als `it.todo`. |
+
+> Wichtig: A wirkt **sofort** (kein erfundener Betrag nötig — es ist eine Ja/Nein-Regel). B und C bleiben in der Auszahlhöhe bewusst **konservativ/unverändert**, bis die offiziellen Werte vorliegen (siehe Abschnitt „Offene offizielle Werte"). Es wurde **kein Betrag geraten.**
+
+---
+
 ## Zusammenfassung
 
 | # | Abweichung | Richtung | Schweregrad |
@@ -130,6 +150,28 @@ Beide landen identisch beim Deckel. Die Lücke ist also **latent** und würde er
 **Ist-Zustand:** Der Rechner zeigt die Geldleistung gesamt und weist **ausdrücklich** aus, dass die **Mietbeihilfe separat** ist (Hinweis in `saetze-2026.ts` und auf der Wien-Seite).
 
 **Bewertung:** bewusst außerhalb des Scopes und bereits transparent disclaimt. Kein Handlungsbedarf, außer du willst die Mietbeihilfe künftig modellieren.
+
+---
+
+## Offene offizielle Werte (NEEDS_OFFICIAL_VALUE)
+
+Diese zwei Werte fehlen, um die `it.todo`-Golden-Tests in echte Cent-genaue Tests zu verwandeln. **Nicht raten** — aus offizieller Quelle holen oder von AK/Sozialberatung Wien bestätigen lassen. In `src/lib/rules/wien-2026.json` stehen beide auf `null` mit `status: "NEEDS_OFFICIAL_VALUE"`.
+
+| Schlüssel in `wien-2026.json` | Was genau gebraucht wird | Primärquelle | Gegencheck |
+|---|---|---|---|
+| `erwerbstaetigenfreibetrag` | Anrechnungsfreier **Anteil** des Erwerbseinkommens (als Bruch 0..1, z.B. 0,20 = 20 %). Klären: gibt es einen **Deckel** und gilt er nur für Erwerbs- (nicht Ersatz-)Einkommen? | **RIS — Wiener Mindestsicherungsgesetz (WMG)**, geltende Fassung: `https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=LrW&Gesetzesnummer=20000246` | **MA 40** (`https://sozialinfo.wien.at`), AK Wien |
+| `unter25_reduzierter_satz_ohne_ausbildung` | **Absoluter EUR-Betrag** des reduzierten Mindeststandards für 18–25 ohne Schul-/Erwerbsausbildung und ohne Beschäftigung über der Geringfügigkeitsgrenze. | **RIS — WMG** (Mindeststandards/Altersstaffel) | **MA 40**, AK Wien |
+
+**Achtung Verwechslungsgefahr beim Freibetrag (B):** *nicht* mit dem deutschen Bürgergeld-Freibetrag (20/30/10 %) und *nicht* mit dem „Land-Mindestbetrag" (20 % des Ausgleichszulagenrichtsatzes) verwechseln. Das sind drei verschiedene Dinge.
+
+**Wenn ein Wert bestätigt ist:**
+1. Wert in `src/lib/rules/wien-2026.json` eintragen, `status` und `quelle` aktualisieren.
+2. Der **Stolperdraht-Test** in `wien-2026.golden.test.ts` wird dann absichtlich rot („offene Werte bleiben null") — das ist das Signal:
+3. Den zugehörigen `it.todo` durch einen echten, Cent-genauen Test ersetzen (Erwartungswert aus dem offiziellen Berechnungsbeispiel).
+4. `STAND.datum` / `dateModified` auf den betroffenen Seiten mitziehen (siehe `wartung-checkliste.md`).
+
+### Kleiner Cousin: F (1-Cent-Rundung) — durch Entscheidung erledigt
+Die frühere Abweichung F (Paar 1.721,84 € vs. Bundeswert 1.721,85 €) ist mit der dokumentierten **Rundungsregel** vom Tisch: Für den Wien-Rechner gilt durchgängig die Komponentensumme (Alleinstehend 1.229,88 €, Paar 2 × 70 % = 1.721,84 €). Die Seed bestätigt 1.721,84 € als Erwartungswert.
 
 ---
 

@@ -28,6 +28,8 @@
   let mitBehinderung = $state(0);
   let einkommenMonat = $state(0);
   let vermoegen = $state(0);
+  // Abweichung A — nur in Wien 2026 als Ausschlussgrund bestätigt.
+  let subsidiaer = $state(false);
 
   let land = $derived(BUNDESLAENDER[bundesland]);
   let erwachsene = $derived.by(() => {
@@ -45,6 +47,8 @@
       mitBehinderung,
       einkommenMonat,
       vermoegen,
+      // Subsidiär-Ausschluss nur dort senden, wo er offiziell gilt (Wien).
+      subsidiaerSchutzberechtigt: bundesland === 'wien' ? subsidiaer : false,
     }),
   );
 
@@ -177,6 +181,20 @@
           Pro Person zusätzlich {euro(land.saetze.behindertenzuschlag)}.
         </span>
       </label>
+
+      {#if bundesland === 'wien'}
+        <!-- Abweichung A — subsidiär Schutzberechtigte: kein Anspruch (Wien 2026) -->
+        <label class="check">
+          <input type="checkbox" bind:checked={subsidiaer} aria-describedby="subsidiaer-hint" />
+          <span class="check__body">
+            <span class="check__label">Subsidiär schutzberechtigt</span>
+            <span id="subsidiaer-hint" class="field__hint">
+              Personen mit subsidiärem Schutz haben seit 1.1.2026 keinen Anspruch auf die
+              Wiener Mindestsicherung mehr — zuständig ist die Grundversorgung.
+            </span>
+          </span>
+        </label>
+      {/if}
     </fieldset>
 
     <!-- Schritt 3: Einkommen + Vermögen -->
@@ -463,6 +481,33 @@
     padding: 8px 12px;
     border-radius: 8px;
     font-size: 13px;
+  }
+
+  /* ---- Checkbox-Feld (z.B. subsidiär schutzberechtigt) ---- */
+  .check {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .check input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--color-primary-500);
+    cursor: pointer;
+  }
+  .check__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .check__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-grey-700);
+    line-height: 1.3;
   }
 
   /* ---- Pill-Cards (Haushalt-Auswahl) — Punkt 3 ---- */
