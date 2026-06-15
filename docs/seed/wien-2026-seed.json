@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "bundesland": "Wien",
+    "jahr": 2026,
+    "stand": "2026-06-15",
+    "zweck": "Seed fuer Golden-Master-Tests des Mindestsicherungs-Rechners.",
+    "regeln_fuer_diese_datei": [
+      "Werte mit status NEEDS_OFFICIAL_VALUE NICHT erfinden. Aus offizieller Quelle (RIS WMG / MA 40) ergaenzen.",
+      "Golden Cases testen nur die Kern-Mindeststandard-Berechnung (Summe der Mindeststandards minus anrechenbares Einkommen), NICHT Zusatzleistungen wie Mietbeihilfe oder Sonderbedarf.",
+      "Die input-Feldnamen sind illustrativ. Auf die echte Rechner-Schnittstelle mappen."
+    ],
+    "quellen": {
+      "ak_wien": "https://wien.arbeiterkammer.at/beratung/arbeitundrecht/arbeitslosigkeit/Mindestsicherung.html",
+      "sozialberatung_wien": "https://www.sozialberatungwien.at/berechnung/",
+      "ma40_sozialinfo": "https://sozialinfo.wien.at/content/de/10/InstitutionDetail.do?it_1=2102082",
+      "ris_wmg": "https://www.ris.bka.gv.at/GeltendeFassung.wxe?Abfrage=LrW&Gesetzesnummer=20000246",
+      "sozialministerium": "https://www.sozialministerium.gv.at/Themen/Soziales/Sozialhilfe-und-Mindestsicherung/Leistungen.html"
+    }
+  },
+
+  "rules": {
+    "mindeststandard_alleinstehend_gesamt": {
+      "wert": 1229.88,
+      "lebensunterhalt": 922.41,
+      "wohnkostenanteil": 307.47,
+      "quelle": "ak_wien",
+      "hinweis": "Wien-Komponentensumme = 1229.88. Bundes-Hoechstsatz = 1229.89 (Rundung). Fuer den Wien-Rechner 1229.88 als verbindlich verwenden und Rundungsregel dokumentieren."
+    },
+    "mindeststandard_paar_gesamt": { "wert": 1721.84, "faktor": 1.4, "quelle": "ak_wien" },
+    "mindeststandard_70prozent": { "wert": 860.92, "quelle": "sozialberatung_wien", "hinweis": "2. volljaehrige Person in Bedarfsgemeinschaft (70% des Mindeststandards)." },
+    "mindeststandard_45prozent": { "wert": 553.45, "quelle": "sozialministerium", "hinweis": "ab 3. volljaehriger Person (45%)." },
+    "mindeststandard_kind": { "wert": 332.07, "quelle": "ak_wien" },
+    "behindertenzuschlag": { "wert": 221.38, "quelle": "sozialberatung_wien" },
+    "vermoegensfreibetrag_pro_person": { "wert": 7379.34, "quelle": "ma40_sozialinfo" },
+    "deckel_175prozent_volljaehrige": { "wert": 2152.31, "quelle": "sozialministerium", "hinweis": "Obergrenze fuer Summe aller volljaehrigen Personen einer Haushaltsgemeinschaft." },
+    "elternzuschlag": { "wert": 0, "quelle": "sozialberatung_wien", "hinweis": "Mit 31.12.2025 ersatzlos abgeschafft (war rund 54 EUR pro Elternteil)." },
+    "aufteilung_lebensunterhalt_anteil": { "wert": 0.75, "quelle": "sozialberatung_wien" },
+    "aufteilung_wohnbedarf_anteil": { "wert": 0.25, "quelle": "sozialberatung_wien" },
+
+    "erwerbstaetigenfreibetrag": {
+      "wert": null,
+      "status": "NEEDS_OFFICIAL_VALUE",
+      "quelle": "ris_wmg",
+      "hinweis": "Abweichung B. Exakte Wiener Regel/Prozent aus WMG bzw. MA 40. NICHT raten. ACHTUNG: nicht mit dem deutschen Buergergeld-Freibetrag (20/30/10%) und nicht mit dem Mindestbetrag (20% Ausgleichszulagenrichtsatz) verwechseln."
+    },
+    "unter25_reduzierter_satz_ohne_ausbildung": {
+      "wert": null,
+      "status": "NEEDS_OFFICIAL_VALUE",
+      "quelle": "ris_wmg",
+      "hinweis": "Abweichung C. 18-25 ohne Schul-/Erwerbsausbildung oder Beschaeftigung ueber Geringfuegigkeit erhalten einen reduzierten Satz. Exakten Betrag aus WMG/MA 40."
+    },
+    "subsidiaer_schutzberechtigt_anspruch": {
+      "wert": false,
+      "quelle": "sozialministerium",
+      "hinweis": "Abweichung A. 2026 kein Anspruch auf Wiener Mindestsicherung, Verweis auf Grundversorgung. Harter Ausschluss in der Logik."
+    }
+  },
+
+  "golden_cases": [
+    {
+      "id": "single-25plus-kein-einkommen",
+      "input": { "haushalt": "alleinstehend", "alter": 30, "kinder": 0, "erwerbseinkommen": 0, "behinderung": false, "subsidiaer": false },
+      "expected_gesamt": 1229.88,
+      "status": "OK",
+      "quelle": "ak_wien"
+    },
+    {
+      "id": "paar-25plus-kein-einkommen",
+      "input": { "haushalt": "paar", "alter": 30, "partner_alter": 30, "kinder": 0, "erwerbseinkommen": 0, "behinderung": false, "subsidiaer": false },
+      "expected_gesamt": 1721.84,
+      "status": "OK",
+      "quelle": "ak_wien"
+    },
+    {
+      "id": "paar-25plus-2-kinder-kein-einkommen",
+      "input": { "haushalt": "paar", "alter": 30, "partner_alter": 30, "kinder": 2, "erwerbseinkommen": 0, "behinderung": false, "subsidiaer": false },
+      "expected_gesamt": 2385.98,
+      "berechnung": "860.92 + 860.92 + 332.07 + 332.07",
+      "status": "OK",
+      "quelle": "sozialberatung_wien"
+    },
+    {
+      "id": "subsidiaer-schutzberechtigt",
+      "input": { "haushalt": "alleinstehend", "alter": 30, "kinder": 0, "erwerbseinkommen": 0, "behinderung": false, "subsidiaer": true },
+      "expected_anspruch": false,
+      "status": "OK",
+      "hinweis": "Abweichung A. Harter Ausschluss, kein Anspruch.",
+      "quelle": "sozialministerium"
+    },
+    {
+      "id": "single-mit-behinderung-kein-einkommen",
+      "input": { "haushalt": "alleinstehend", "alter": 40, "kinder": 0, "erwerbseinkommen": 0, "behinderung": true, "subsidiaer": false },
+      "expected_gesamt": null,
+      "status": "NEEDS_VERIFY",
+      "hinweis": "Vermutlich 1229.88 + 221.38 = 1451.26. Vor Aktivierung gegen offizielle Quelle pruefen, ob der Behindertenzuschlag auf den vollen Mindeststandard aufstockt.",
+      "quelle": "sozialberatung_wien"
+    },
+    {
+      "id": "single-mit-erwerbseinkommen-400",
+      "input": { "haushalt": "alleinstehend", "alter": 30, "kinder": 0, "erwerbseinkommen": 400, "behinderung": false, "subsidiaer": false },
+      "expected_gesamt": null,
+      "status": "NEEDS_OFFICIAL_VALUE",
+      "hinweis": "Regressionstest fuer Abweichung B. Erwartungswert haengt vom Erwerbstaetigenfreibetrag ab. Aus offiziellem Berechnungsbeispiel oder WMG ableiten. Mindest-Assertion bis dahin: Ergebnis > Ergebnis bei 1:1-Abzug (1229.88 - 400 = 829.88).",
+      "quelle": "ris_wmg"
+    },
+    {
+      "id": "junger-erwachsener-20-ohne-ausbildung",
+      "input": { "haushalt": "alleinstehend", "alter": 20, "in_ausbildung": false, "erwerbstaetig": false, "kinder": 0, "erwerbseinkommen": 0, "behinderung": false, "subsidiaer": false },
+      "expected_gesamt": null,
+      "status": "NEEDS_OFFICIAL_VALUE",
+      "hinweis": "Regressionstest fuer Abweichung C. Reduzierter Satz, exakter Betrag aus WMG/MA 40. Mindest-Assertion bis dahin: Ergebnis < voller Satz 1229.88.",
+      "quelle": "ris_wmg"
+    }
+  ]
+}
