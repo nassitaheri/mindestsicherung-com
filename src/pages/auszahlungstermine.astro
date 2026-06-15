@@ -1,5 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Sprungnav from '../components/Sprungnav.astro';
+import NachObenLink from '../components/NachObenLink.astro';
+
+const abschnitte = [
+  { id: 'wien-termine', label: 'Wien: Termine 2026' },
+  { id: 'andere-bundeslaender', label: 'Andere Bundesländer' },
+  { id: 'zahlung-ausbleibt', label: 'Zahlung bleibt aus' },
+  { id: 'erstantrag', label: 'Bei Erstantrag' },
+  { id: 'bankverbindung', label: 'Bankverbindung ändern' },
+];
 
 const title = 'Mindestsicherung Auszahlungstermine 2026 – Wann kommt das Geld?';
 const description = 'Wann wird die Mindestsicherung und Sozialhilfe 2026 ausgezahlt? Alle Auszahlungstermine für Wien und Österreich auf einen Blick.';
@@ -34,9 +44,13 @@ const aktuell = aktuellerMonat; // Jänner = 0
     </p>
   </section>
 
+  <div class="container sprungnav-wrap">
+    <Sprungnav items={abschnitte} />
+  </div>
+
   <section class="container content">
 
-    <h2>Wien: Auszahlungstermine 2026</h2>
+    <h2 id="wien-termine">Wien: Auszahlungstermine 2026</h2>
     <p>In Wien wird die Mindestsicherung monatlich von der MA 40 angewiesen. Die Gutschrift auf dem Konto erfolgt in der Regel am 1. Werktag des Monats.</p>
 
     <div class="table-wrap">
@@ -64,7 +78,9 @@ const aktuell = aktuellerMonat; // Jänner = 0
       </p>
     </div>
 
-    <h2>Andere Bundesländer</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="andere-bundeslaender">Andere Bundesländer</h2>
     <p>
       In den anderen Bundesländern gelten ähnliche Regelungen: Die Sozialhilfe wird monatlich ausgezahlt, in der Regel zu Monatsbeginn. Die genauen Termine variieren je nach Bundesland und Behörde.
     </p>
@@ -73,7 +89,9 @@ const aktuell = aktuellerMonat; // Jänner = 0
       <li><strong>Oberösterreich, Steiermark, Kärnten, Salzburg, Tirol, Vorarlberg, Burgenland:</strong> Monatliche Auszahlung zu Monatsbeginn. Genaue Termine erfragen Sie bei der zuständigen Bezirkshauptmannschaft.</li>
     </ul>
 
-    <h2>Was tun, wenn die Zahlung ausbleibt?</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="zahlung-ausbleibt">Was tun, wenn die Zahlung ausbleibt?</h2>
     <ol class="steps">
       <li>
         <strong>Zuerst warten:</strong> Banklaufzeiten und interne Bearbeitungszeiten können 1 bis 2 Werktage in Anspruch nehmen.
@@ -89,16 +107,22 @@ const aktuell = aktuellerMonat; // Jänner = 0
       </li>
     </ol>
 
-    <h2>Auszahlung bei Erstantrag</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="erstantrag">Auszahlung bei Erstantrag</h2>
     <p>
       Bei einem Erstantrag beginnt die Auszahlung frühestens ab dem Monat der Antragstellung, <strong>nicht rückwirkend</strong>. Die Bearbeitung dauert in der Regel 4 bis 6 Wochen. In dringenden Fällen kann bei der Behörde eine <strong>Soforthilfe</strong> beantragt werden, die schneller ausgezahlt wird.
     </p>
 
-    <h2>Bankverbindung ändern</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="bankverbindung">Bankverbindung ändern</h2>
     <p>
       Eine Änderung der Bankverbindung muss der zuständigen Behörde <strong>schriftlich und rechtzeitig</strong> mitgeteilt werden — idealerweise mindestens 2 Wochen vor dem nächsten Auszahlungstermin. In Wien geht das über das zuständige Sozialzentrum oder online über
       <a href="https://www.wien.gv.at" target="_blank" rel="noopener noreferrer">wien.gv.at</a>.
     </p>
+
+    <div class="gruppe-fuss"><NachObenLink /></div>
 
     <p class="disclaimer">
       Unverbindliche Orientierung, keine Rechts- oder Sozialberatung. Maßgeblich sind die zuständigen Behörden des jeweiligen Bundeslandes. Stand: Jänner 2026.
@@ -135,7 +159,15 @@ const aktuell = aktuellerMonat; // Jänner = 0
       margin: 0;
     }
 
-    .content { margin-top: 56px; padding-bottom: 64px; }
+    .sprungnav-wrap { margin-top: 32px; }
+
+    .content { margin-top: 40px; padding-bottom: 64px; }
+
+    .gruppe-fuss {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
 
     .content h2 {
       font-size: 24px;

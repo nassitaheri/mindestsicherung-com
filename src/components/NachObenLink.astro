@@ -1,0 +1,36 @@
+---
+/**
+ * Dezenter Inline-Link "↑ Nach oben" mit Pfeil-Icon.
+ * Springt standardmäßig an den Seitenanfang (#top, gesetzt im Layout-Header).
+ */
+interface Props {
+  ziel?: string;
+  text?: string;
+}
+
+const { ziel = '#top', text = 'Nach oben' } = Astro.props;
+---
+
+<a class="nach-oben-link" href={ziel}>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="m18 15-6-6-6 6" />
+  </svg>
+  {text}
+</a>
+
+<style>
+  .nach-oben-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-grey-500);
+    text-decoration: none;
+    transition: color 120ms ease;
+  }
+  .nach-oben-link:hover {
+    color: var(--color-primary-600);
+  }
+</style>

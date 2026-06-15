@@ -1,13 +1,30 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Sprungnav from '../components/Sprungnav.astro';
+import NachObenLink from '../components/NachObenLink.astro';
 
 const title = 'Datenschutzerklärung | mindestsicherung.com';
 const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem Datenschutzgesetz.';
+
+const abschnitte = [
+  { id: 'allgemeines', label: 'Allgemeines' },
+  { id: 'hosting', label: 'Hosting' },
+  { id: 'rechner', label: 'Rechner' },
+  { id: 'kontakt', label: 'Kontakt' },
+  { id: 'adsense', label: 'Werbung (AdSense)' },
+  { id: 'cookies', label: 'Cookies' },
+  { id: 'rechte', label: 'Ihre Rechte' },
+  { id: 'beschwerde', label: 'Beschwerderecht' },
+];
 ---
 
 <Layout title={title} description={description} path="/datenschutz/">
   <section class="container legal">
     <h1>Datenschutzerklärung</h1>
+
+    <div class="sprungnav-wrap">
+      <Sprungnav items={abschnitte} />
+    </div>
 
     <h2>Verantwortlicher</h2>
     <p>
@@ -17,7 +34,7 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       E-Mail: <a href="mailto:kontakt@mindestsicherung.com">kontakt@mindestsicherung.com</a>
     </p>
 
-    <h2>1. Allgemeines</h2>
+    <h2 id="allgemeines">1. Allgemeines</h2>
     <p>
       Der Schutz Ihrer personenbezogenen Daten ist uns wichtig. Diese
       Datenschutzerklärung informiert Sie darüber, welche Daten beim Besuch von
@@ -28,7 +45,9 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       österreichische Datenschutzgesetz (DSG).
     </p>
 
-    <h2>2. Hosting und Infrastruktur</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="hosting">2. Hosting und Infrastruktur</h2>
     <p>Diese Website wird gehostet von:</p>
     <p>
       <strong>Cloudflare, Inc.</strong><br />
@@ -52,7 +71,9 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       </a>
     </p>
 
-    <h2>3. Rechner-Funktion</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="rechner">3. Rechner-Funktion</h2>
     <p>
       Der Mindestsicherungs-Rechner auf dieser Website funktioniert vollständig
       im Browser. Eingegebene Daten (Bundesland, Haushaltstyp, Einkommen,
@@ -61,7 +82,9 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       lokal auf Ihrem Gerät.
     </p>
 
-    <h2>4. Kontakt per E-Mail</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="kontakt">4. Kontakt per E-Mail</h2>
     <p>
       Wenn Sie uns per E-Mail an
       <a href="mailto:kontakt@mindestsicherung.com">kontakt@mindestsicherung.com</a>
@@ -78,7 +101,9 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       sofern keine gesetzlichen Aufbewahrungspflichten bestehen.
     </p>
 
-    <h2>5. Google AdSense (Werbeanzeigen)</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="adsense">5. Google AdSense (Werbeanzeigen)</h2>
     <p>
       Diese Website verwendet Google AdSense, einen Dienst zur Einbindung von
       Werbeanzeigen der Google Ireland Limited, Gordon House, Barrow Street,
@@ -102,7 +127,9 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       </a>
     </p>
 
-    <h2>6. Cookies</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="cookies">6. Cookies</h2>
     <p>
       Diese Website verwendet technisch notwendige Cookies (z. B. für den
       Cookie-Consent-Banner). Darüber hinaus werden nur dann Cookies gesetzt, wenn
@@ -110,7 +137,9 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
     </p>
     <p>Sie können Cookies in Ihrem Browser jederzeit löschen oder deaktivieren.</p>
 
-    <h2>7. Ihre Rechte</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="rechte">7. Ihre Rechte</h2>
     <p>Sie haben gegenüber dem Verantwortlichen folgende Rechte:</p>
     <ul>
       <li><strong>Auskunft</strong> über die zu Ihrer Person gespeicherten Daten (Art. 15 DSGVO)</li>
@@ -126,7 +155,9 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       <a href="mailto:kontakt@mindestsicherung.com">kontakt@mindestsicherung.com</a>
     </p>
 
-    <h2>8. Beschwerderecht bei der Aufsichtsbehörde</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="beschwerde">8. Beschwerderecht bei der Aufsichtsbehörde</h2>
     <p>
       Wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer Daten gegen das
       Datenschutzrecht verstößt, können Sie Beschwerde bei der österreichischen
@@ -139,6 +170,8 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       E-Mail: <a href="mailto:dsb@dsb.gv.at">dsb@dsb.gv.at</a><br />
       Web: <a href="https://www.dsb.gv.at" target="_blank" rel="noopener noreferrer">www.dsb.gv.at</a>
     </p>
+
+    <div class="gruppe-fuss"><NachObenLink /></div>
 
     <p class="legal__stand">Stand: Juni 2026</p>
   </section>
@@ -153,7 +186,13 @@ const description = 'Datenschutzerklärung gemäß DSGVO und österreichischem D
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--color-grey-900);
-      margin: 0 0 40px;
+      margin: 0 0 24px;
+    }
+    .sprungnav-wrap { margin: 0 0 8px; }
+    .gruppe-fuss {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
     }
     .legal h2 {
       font-size: 16px;
