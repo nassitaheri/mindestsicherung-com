@@ -1,5 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Sprungnav from '../components/Sprungnav.astro';
+import NachObenLink from '../components/NachObenLink.astro';
+
+// Abschnitte für das Sprungmenü — ids müssen mit den h2 unten übereinstimmen.
+const abschnitte = [
+  { id: 'grundlagen', label: 'Grundlagen' },
+  { id: 'einkommen-arbeit', label: 'Einkommen & Arbeit' },
+  { id: 'vermoegen', label: 'Vermögen' },
+  { id: 'kinder-familie', label: 'Kinder & Familie' },
+  { id: 'antrag-verfahren', label: 'Antrag & Verfahren' },
+  { id: 'besondere-situationen', label: 'Besondere Situationen' },
+];
 
 const title = 'Mindestsicherung FAQ 2026 – Häufige Fragen & Antworten';
 const description = 'Antworten auf die häufigsten Fragen zur Mindestsicherung und Sozialhilfe in Österreich 2026: Vermögen, Anrechnung, Arbeit, Kinder, Antrag und mehr.';
@@ -204,13 +216,17 @@ const faqSchemaJson = `{
     <p class="hero__kicker">Österreich · Stand Jänner 2026</p>
     <h1 class="hero__title">Häufige Fragen zur Mindestsicherung</h1>
     <p class="hero__lead">
-      Hier finden Sie Antworten auf die häufigsten Fragen zur Mindestsicherung und Sozialhilfe in Österreich. Die Regeln unterscheiden sich je nach Bundesland — die Antworten beziehen sich, sofern nicht anders angegeben, auf die allgemeinen bundesweiten Regelungen bzw. Wien.
+      Hier finden Sie Antworten auf die häufigsten Fragen zur Mindestsicherung und Sozialhilfe in Österreich. Die Regeln unterscheiden sich je nach Bundesland. Die Antworten beziehen sich, sofern nicht anders angegeben, auf die allgemeinen bundesweiten Regelungen bzw. Wien.
     </p>
   </section>
 
+  <div class="container sprungnav-wrap">
+    <Sprungnav items={abschnitte} />
+  </div>
+
   <section class="container content">
 
-    <h2>Grundlagen</h2>
+    <h2 id="grundlagen">Grundlagen</h2>
     <div class="faq">
       <div class="faq__item">
         <h3>Was ist der Unterschied zwischen Mindestsicherung und Sozialhilfe?</h3>
@@ -236,11 +252,13 @@ const faqSchemaJson = `{
       </div>
     </div>
 
-    <h2>Einkommen &amp; Arbeit</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="einkommen-arbeit">Einkommen &amp; Arbeit</h2>
     <div class="faq">
       <div class="faq__item">
         <h3>Kann man Mindestsicherung und Arbeit kombinieren?</h3>
-        <p>Ja. Erwerbseinkommen wird nicht zur Gänze angerechnet. Ein Teil des Einkommens bleibt anrechnungsfrei, um einen Anreiz zur Erwerbstätigkeit zu schaffen. Die genaue Höhe des Freibetrags regelt jedes Bundesland selbst — in Wien sind es derzeit bis zu 20 % des Erwerbseinkommens.</p>
+        <p>Ja. Erwerbseinkommen wird nicht zur Gänze angerechnet. Ein Teil des Einkommens bleibt anrechnungsfrei, um einen Anreiz zur Erwerbstätigkeit zu schaffen. Die genaue Höhe des Freibetrags regelt jedes Bundesland selbst. In Wien sind es derzeit bis zu 20 % des Erwerbseinkommens.</p>
       </div>
       <div class="faq__item">
         <h3>Was gilt als anrechenbares Einkommen?</h3>
@@ -257,7 +275,9 @@ const faqSchemaJson = `{
       </div>
     </div>
 
-    <h2>Vermögen</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="vermoegen">Vermögen</h2>
     <div class="faq">
       <div class="faq__item">
         <h3>Wie viel Erspartes darf ich haben?</h3>
@@ -277,7 +297,9 @@ const faqSchemaJson = `{
       </div>
     </div>
 
-    <h2>Kinder &amp; Familie</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="kinder-familie">Kinder &amp; Familie</h2>
     <div class="faq">
       <div class="faq__item">
         <h3>Bekomme ich mehr, wenn ich Kinder habe?</h3>
@@ -293,7 +315,9 @@ const faqSchemaJson = `{
       </div>
     </div>
 
-    <h2>Antrag &amp; Verfahren</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="antrag-verfahren">Antrag &amp; Verfahren</h2>
     <div class="faq">
       <div class="faq__item">
         <h3>Wo stelle ich den Antrag?</h3>
@@ -322,7 +346,9 @@ const faqSchemaJson = `{
       </div>
     </div>
 
-    <h2>Besondere Situationen</h2>
+    <div class="gruppe-fuss"><NachObenLink /></div>
+
+    <h2 id="besondere-situationen">Besondere Situationen</h2>
     <div class="faq">
       <div class="faq__item">
         <h3>Was gilt für EU-Bürger?</h3>
@@ -341,6 +367,8 @@ const faqSchemaJson = `{
         <p>Studierende haben grundsätzlich eingeschränkten Anspruch. Wer Studienbeihilfe bezieht oder beziehen könnte, wird in der Regel auf diese verwiesen. Die genauen Regelungen sind je nach Bundesland unterschiedlich.</p>
       </div>
     </div>
+
+    <div class="gruppe-fuss"><NachObenLink /></div>
 
     <p class="disclaimer">
       Unverbindliche Orientierung, keine Rechts- oder Sozialberatung. Maßgeblich sind die zuständigen Behörden des jeweiligen Bundeslandes. Stand: Jänner 2026.
@@ -377,7 +405,16 @@ const faqSchemaJson = `{
       margin: 0;
     }
 
-    .content { margin-top: 56px; padding-bottom: 64px; }
+    .sprungnav-wrap { margin-top: 32px; }
+
+    .content { margin-top: 40px; padding-bottom: 64px; }
+
+    /* "Nach oben"-Link am Ende jeder FAQ-Gruppe, rechtsbündig. */
+    .gruppe-fuss {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
 
     .content h2 {
       font-size: 20px;

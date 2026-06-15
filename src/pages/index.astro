@@ -3,10 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import Rechner from '../components/Rechner.svelte';
 import { STAND, BUNDESLAENDER, BUNDESLAND_REIHENFOLGE } from '../data/saetze-2026';
 
-const title =
-  'Mindestsicherung-Rechner 2026 — Schnell, klar, ohne Werbeflut | mindestsicherung.com';
-const description =
-  'Wie viel Mindestsicherung steht dir 2026 zu? Schneller, transparenter Rechner für Österreich. Geprüft für Wien. Keine Anmeldung, keine Werbung, sofortiges Ergebnis.';
+const title = `Mindestsicherung-Rechner ${STAND.jahr}: schnell, klar, ohne Werbeflut | mindestsicherung.com`;
+const description = `Wie viel Mindestsicherung steht dir ${STAND.jahr} zu? Schneller, transparenter Rechner für Österreich. Geprüft für Wien. Keine Anmeldung, keine Werbung, sofortiges Ergebnis.`;
 ---
 
 <Layout title={title} description={description} path="/">
@@ -14,11 +12,12 @@ const description =
   <!-- Punkt 2/4: Hero — 48px/700, max-width 680px, Abstand 64px zum Rechner -->
   <section class="hero container">
     <h1 class="hero__title">
-      Mindestsicherung &amp; Sozialhilfe in Österreich — schnell ausrechnen.
+      Wie viel Mindestsicherung steht dir {STAND.jahr} zu?
     </h1>
     <p class="hero__lead">
-      Klare Berechnung nach den aktuellen Sätzen {STAND.jahr}. Ohne Anmeldung,
-      ohne Werbeflut, ohne juristischen Jargon.
+      Gib deine Haushaltssituation ein und sieh in unter einer Minute, mit
+      welchem Betrag du rechnen kannst. Geprüfte Sätze für Wien. Gratis, ohne
+      Anmeldung.
     </p>
   </section>
 
@@ -140,7 +139,7 @@ const description =
     </ol>
     <div class="how-note">
       Eine zusätzliche <strong>Mietbeihilfe</strong> ist je nach Bundesland möglich,
-      wird hier aber nicht mitberechnet — sie ist getrennt geregelt.
+      wird hier aber nicht mitberechnet. Sie ist getrennt geregelt.
     </div>
   </section>
 

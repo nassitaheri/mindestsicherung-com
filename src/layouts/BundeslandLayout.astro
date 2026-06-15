@@ -21,6 +21,7 @@
  */
 import Layout from './Layout.astro';
 import type { Bundesland } from '../data/saetze-2026';
+import { formatAT } from '../lib/datum';
 
 type FaqItem = { frage: string; antwort: string };
 type Quelle = { label: string; url: string };
@@ -60,15 +61,7 @@ const path = `/mindestsicherung-${land.slug}/`;
 const url = `https://mindestsicherung.com${path}`;
 const h1 = `${land.systemName} ${land.name} 2026: Höhe, Anspruch & Antrag`;
 
-// --- Österreichische Datumsformatierung (Jänner statt Januar) ----------------
-const AT_MONATE = [
-  'Jänner', 'Februar', 'März', 'April', 'Mai', 'Juni',
-  'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
-];
-function formatAT(iso: string): string {
-  const [j, m, t] = iso.split('-').map(Number);
-  return `${t}. ${AT_MONATE[m - 1]} ${j}`;
-}
+// Datumsformatierung (Jänner statt Januar) kommt aus src/lib/datum.ts.
 const standLesbar = formatAT(standDatum);
 const aktualisiertLesbar = formatAT(dateModified);
 

@@ -10,6 +10,25 @@ type Props = {
 const { title, description, path = '/' } = Astro.props;
 const canonical = `https://mindestsicherung.com${path}`;
 const heutigesJahr = new Date().getFullYear();
+
+// Hauptnavigation. "Rechner" ist die Startseite (der Rechner) — kurzes Label
+// gegen das Gedränge neben dem Logo.
+const navLinks = [
+  { href: '/', label: 'Rechner' },
+  { href: '/bundeslaender/', label: 'Bundesländer' },
+  { href: '/ratgeber/', label: 'Ratgeber' },
+  { href: '/ueber-uns/', label: 'Über uns' },
+];
+
+// Aktiven Menüpunkt markieren — Unterseiten zählen zur passenden Gruppe.
+function istAktiv(href: string): boolean {
+  if (href === '/') return path === '/';
+  if (href === '/ratgeber/')
+    return ['/ratgeber/', '/faq/', '/auszahlungstermine/'].includes(path);
+  if (href === '/bundeslaender/')
+    return path === '/bundeslaender/' || path === '/mindestsicherung-wien/';
+  return path === href;
+}
 ---
 
 <!doctype html>
@@ -48,17 +67,18 @@ const heutigesJahr = new Date().getFullYear();
   <body>
     <a href="#main" class="skiplink">Zum Inhalt springen</a>
 
-    <!-- Punkt 5 DESIGN-OPTIMIERUNG: Nav verfeinert -->
-    <header class="site-header">
+    <!-- Punkt 5 DESIGN-OPTIMIERUNG: Nav zweizeilig — Logo oben, Menü volle Breite darunter -->
+    <header class="site-header" id="top">
       <div class="container site-header__inner">
         <a href="/" class="brand" aria-label="mindestsicherung.com — Startseite">
           mindestsicherung<span class="brand__tld">.com</span>
         </a>
         <nav class="site-nav" aria-label="Hauptnavigation">
-          <a href="/">Mindestsicherung berechnen</a>
-          <a href="/bundeslaender/">Bundesländer</a>
-          <a href="/ratgeber/">Ratgeber</a>
-          <a href="/ueber-uns/">Über uns</a>
+          {navLinks.map((link) => (
+            <a href={link.href} aria-current={istAktiv(link.href) ? 'page' : undefined}>
+              {link.label}
+            </a>
+          ))}
         </nav>
       </div>
     </header>
@@ -82,12 +102,43 @@ const heutigesJahr = new Date().getFullYear();
       </div>
     </footer>
 
+    <!-- Schwebender "Nach oben"-Button — erscheint beim Scrollen, auf jeder Seite -->
+    <a href="#top" class="zum-anfang" aria-label="Zurück nach oben" data-zum-anfang>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m18 15-6-6-6 6" />
+      </svg>
+      <span class="zum-anfang__text">Nach oben</span>
+    </a>
+
+    <script>
+      // Button erst nach etwas Scrollen einblenden — sonst stört er oben.
+      const knopf = document.querySelector('[data-zum-anfang]');
+      if (knopf) {
+        const aktualisieren = () => {
+          knopf.classList.toggle('is-visible', window.scrollY > 600);
+        };
+        window.addEventListener('scroll', aktualisieren, { passive: true });
+        aktualisieren();
+      }
+    </script>
+
     <style is:global>
       /* ---- Layout-Kern ---- */
       .container {
         max-width: 680px;   /* Punkt 4: max-width 680 px */
         margin: 0 auto;
         padding: 0 20px;
+      }
+
+      /* Sprungziele (#anker) nicht unter dem Sticky-Header verstecken. */
+      html {
+        scroll-padding-top: 96px;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        html {
+          scroll-behavior: smooth;
+        }
       }
 
       .skiplink {
@@ -111,22 +162,22 @@ const heutigesJahr = new Date().getFullYear();
         border-bottom: 1px solid var(--color-grey-100);
         box-shadow: 0 1px 3px rgba(0,0,0,0.04);
       }
+      /* Zweizeilig: Logo oben, Menü in eigener Zeile über die volle Breite. */
       .site-header__inner {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        row-gap: 10px;
-        padding-top: 14px;
-        padding-bottom: 14px;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 12px;
+        padding-bottom: 12px;
       }
       .brand {
         text-decoration: none;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 600;
         letter-spacing: -0.01em;
         color: var(--color-primary-700);
         line-height: 1;
+        align-self: flex-start;
       }
       .brand__tld {
         color: var(--color-primary-500);
@@ -134,20 +185,25 @@ const heutigesJahr = new Date().getFullYear();
       .site-nav {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px 18px;
+        gap: 4px;
         font-size: 14px;
         font-weight: 500;
-      }
-      @media (max-width: 560px) {
-        .site-nav { width: 100%; }
+        margin: 0 -10px;   /* Pill-Padding optisch zum Rand ausgleichen */
       }
       .site-nav a {
         color: var(--color-grey-600);
         text-decoration: none;
-        transition: color 120ms ease;
+        padding: 5px 10px;
+        border-radius: 8px;
+        transition: color 120ms ease, background 120ms ease;
       }
       .site-nav a:hover {
-        color: var(--color-primary-600);
+        color: var(--color-primary-700);
+        background: var(--color-grey-50);
+      }
+      .site-nav a[aria-current='page'] {
+        color: var(--color-primary-700);
+        background: var(--color-primary-50);
       }
 
       /* ---- Footer — Punkt 7 ---- */
@@ -189,6 +245,57 @@ const heutigesJahr = new Date().getFullYear();
         font-size: 12px;
         color: var(--color-grey-400);
         margin: 0;
+      }
+
+      /* ---- "Nach oben"-Button — schwebend, erscheint beim Scrollen ---- */
+      .zum-anfang {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 30;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        border-radius: 99px;
+        background: var(--color-primary-600);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+        opacity: 0;
+        transform: translateY(8px);
+        pointer-events: none;
+        transition: opacity 160ms ease, transform 160ms ease, background 120ms ease;
+      }
+      .zum-anfang.is-visible {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+      .zum-anfang:hover {
+        background: var(--color-primary-700);
+      }
+      .zum-anfang:focus-visible {
+        outline: 2px solid var(--color-primary-700);
+        outline-offset: 2px;
+      }
+      /* Auf schmalen Schirmen nur das Pfeil-Icon (Kreis), spart Platz. */
+      @media (max-width: 480px) {
+        .zum-anfang {
+          right: 16px;
+          bottom: 16px;
+          padding: 11px;
+        }
+        .zum-anfang__text {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip: rect(0 0 0 0);
+          white-space: nowrap;
+        }
       }
     </style>
   </body>

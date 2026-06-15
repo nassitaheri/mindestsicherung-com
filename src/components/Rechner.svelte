@@ -7,6 +7,7 @@
 -->
 <script lang="ts">
   import { berechne, euro, type HaushaltInput } from '../lib/calc';
+  import { formatAT } from '../lib/datum';
   import {
     BUNDESLAENDER,
     BUNDESLAND_REIHENFOLGE,
@@ -63,7 +64,7 @@
   <header class="rechner__head">
     <h2 id="rechner-titel" class="rechner__title">Mindestsicherung berechnen</h2>
     <p class="rechner__sub">
-      Schnelle, unverbindliche Orientierung. Stand: {STAND.datum}.
+      Schnelle, unverbindliche Orientierung. Stand: {formatAT(STAND.datum)}.
     </p>
   </header>
 
